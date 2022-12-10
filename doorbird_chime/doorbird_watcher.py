@@ -26,7 +26,7 @@ class DoorbirdWatcher:
                 print('Duplicate event.')
                 continue
             # Store a copy of this message for future comparison.
-            last_mess = mess
+            last_message = mess
             print(mess)
             # Load config from file, this lets us dynamically update the config.
             conf = Config(Path(__file__).parent / 'conf' / 'conf.yml')
