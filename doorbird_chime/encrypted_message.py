@@ -10,7 +10,7 @@ class EncryptedMessage:
             raise ValueError('Not a doorbird event.')
         # This is the doorbird signature in its individual pieces.
         self.ident = message_bytes[:3]
-        self.version = message_bytes[4]
+        self.version = message_bytes[3]
         try:
             # Try to get the decryption variables and encrypted cyphertext.
             self.opslimit = int.from_bytes(message_bytes[4:8], 'big')
