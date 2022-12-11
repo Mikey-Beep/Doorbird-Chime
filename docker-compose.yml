@@ -1,0 +1,21 @@
+services:
+  chime:
+    build: ./doorbird_chime
+    ports:
+      - '6524:6524/udp'
+    networks:
+      - doorbird-net
+    volumes:
+      - doorbird-conf:/etc/chime/conf
+      - doorbird-log:/etc/chime/log
+      - doorbird-sounds:/etc/chime/sounds
+    devices:
+      - '/dev/snd:/dev/snd'
+
+volumes:
+  doorbird-conf: {}
+  doorbird-log: {}
+  doorbird-sounds: {}
+
+networks:
+  doorbird-net: {}
