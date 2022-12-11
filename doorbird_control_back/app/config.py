@@ -9,7 +9,7 @@ class ConfigManager:
             with self.conf_path.open() as conf_file:
                 self.config = yaml.safe_load(conf_file)
         except FileNotFoundError:
-            self.config = self.build_bare_config()
+            self.build_bare_config()
         
     def build_bare_config(self):
         config = {
@@ -19,6 +19,7 @@ class ConfigManager:
             'sleep_start': '',
             'sleep_end': ''
         }
+        self.config = config
         self.save_config()
         return config
 
