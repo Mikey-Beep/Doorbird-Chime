@@ -15,4 +15,4 @@ class DecryptedMessage:
         return self.cleartext == other.cleartext
 
     def __str__(self) -> str:
-        return f'ID {id}\nEVENT {self.event}\nTIMESTAMP {self.timestamp}'
+        return f'ID {self.id}\nEVENT {self.event}\nTIMESTAMP {self.timestamp}'
