@@ -30,7 +30,7 @@ class DoorbirdWatcher:
             print(mess)
             log_path = Path(__file__).parent.parent / 'log' / 'message_log.txt'
             log_path.parent.mkdir(parents=True, exist_ok=True)
-            with log_path.open('a+'):
+            with log_path.open('w'):
                 log_path.write_text(f'{mess.message_bytes}\n')
             # Load config from file, this lets us dynamically update the config.
             conf = Config(Path(__file__).parent.parent / 'conf' / 'conf.yml')
