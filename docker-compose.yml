@@ -14,7 +14,7 @@ services:
   back:
     build: ./doorbird_control_back
     ports:
-      - '5004:5004'
+      - '5004:80'
     networks:
       - doorbird-net
     volumes:
