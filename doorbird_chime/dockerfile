@@ -6,4 +6,4 @@ RUN apk add --no-cache --virtual .pynacl_deps build-base python3-dev libffi-dev 
     apk del .pynacl_deps
 COPY . /etc/chime
 WORKDIR /etc/chime
-CMD ["python3", "-u", "doorbird_watcher.py"]
+CMD ["python3", "-u", "app/doorbird_watcher.py"]

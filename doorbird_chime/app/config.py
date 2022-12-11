@@ -9,6 +9,6 @@ class Config:
         # Pull config settings from the yaml.
         self.password = config['password']
         self.user = config['user']
-        self.chime_sound = Path(__file__).parent / 'sounds' / config['sound_file']
+        self.chime_sound = Path(__file__).parent.parent / 'sounds' / config['sound_file']
         self.sleep_start = config['sleep_start']
         self.sleep_end = config['sleep_end']

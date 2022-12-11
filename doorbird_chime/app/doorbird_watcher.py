@@ -28,8 +28,11 @@ class DoorbirdWatcher:
             # Store a copy of this message for future comparison.
             last_message = mess
             print(mess)
+            log_path = Path(__file__).parent.parent / 'log' / 'message_log.txt'
+            with log_path.open('a'):
+                log_path.write_text(f'{mess}\n')
             # Load config from file, this lets us dynamically update the config.
-            conf = Config(Path(__file__).parent / 'conf' / 'conf.yml')
+            conf = Config(Path(__file__).parent.parent / 'conf' / 'conf.yml')
             # Decode the message.
             try:
                 decoded = mess.decrypt(conf.password)
