@@ -19,7 +19,6 @@ class DoorbirdWatcher:
             try:
                 mess = EncryptedMessage(mess)
             except ValueError:
-                print('Not a doorbird message.')
                 continue
             # Load config from file, this lets us dynamically update the config.
             conf = Config(Path(__file__).parent.parent / 'conf' / 'conf.yml')
