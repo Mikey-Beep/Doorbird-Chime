@@ -15,19 +15,22 @@ def test_broadcast():
     broadcaster.broadcast(config_manager.config['test_packet'])
     return Response(status = 200)
 
-@app.route('/config', methods = ['POST'])
+@app.route('/config', methods = ['GET', 'POST'])
 def write_config():
-    config_manager.config['user'] = request.json['user']
-    config_manager.config['password'] = request.json['password']
-    config_manager.config['sound_file'] = request.json['sound_file']
-    config_manager.config['sleep_start'] = request.json['sleep_start']
-    config_manager.config['sleep_end'] = request.json['sleep_end']
-    try:
-        config_manager.config['test_packet'] = request.json['test_packet']
-    except:
-        pass
-    config_manager.save_config()
-    return Response(status = 200)
+    if request.method == 'GET':
+        return Response(status = 200, response = json.dumps(config_manager.config))
+    elif request.method == 'POST':
+        config_manager.config['user'] = request.json['user']
+        config_manager.config['password'] = request.json['password']
+        config_manager.config['sound_file'] = request.json['sound_file']
+        config_manager.config['sleep_start'] = request.json['sleep_start']
+        config_manager.config['sleep_end'] = request.json['sleep_end']
+        try:
+            config_manager.config['test_packet'] = request.json['test_packet']
+        except:
+            pass
+        config_manager.save_config()
+        return Response(status = 200)
 
 @app.route('/sound_files', methods = ['GET'])
 def list_sound_files():
