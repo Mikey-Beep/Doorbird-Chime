@@ -19,6 +19,7 @@ services:
       - doorbird-net
     volumes:
       - doorbird-conf:/etc/serv/conf
+      - doorbird-sounds:/etc/serv/sounds
 
 volumes:
   doorbird-conf: {}

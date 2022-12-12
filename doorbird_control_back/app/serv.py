@@ -1,9 +1,12 @@
+import json
 from flask import Flask, request, Response
 from test_broadcast import TestBroadcaster
 from config import ConfigManager
+from sounds import SoundManager
 
 app = Flask(__name__)
 config_manager = ConfigManager()
+sound_manager = SoundManager()
 
 @app.route('/test_broadcast', methods = ['GET'])
 def test_broadcast():
@@ -24,5 +27,9 @@ def write_config():
         pass
     config_manager.save_config()
     return Response(status = 200)
+
+@app.route('/sound_files', methods = ['GET'])
+def list_sound_files():
+    return Response(status = 200, response = json.dumps(sound_manager.list_sounds()))
 
 app.run(host = '0.0.0.0', port = 80)
