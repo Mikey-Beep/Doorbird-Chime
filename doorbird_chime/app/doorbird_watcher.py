@@ -24,12 +24,12 @@ class DoorbirdWatcher:
             # Load config from file, this lets us dynamically update the config.
             conf = Config(Path(__file__).parent.parent / 'conf' / 'conf.yml')
             # See if this is a duplicate of the last message.
-            if mess == last_message and mess != conf.test_message:
+            if mess == last_message and mess != EncryptedMessage(conf.test_packet):
                 print('Duplicate event.')
                 continue
             print(mess)
             # Store a copy of this message for future comparison.
-            if mess != conf.test_message:
+            if mess != EncryptedMessage(conf.test_packet):
                 last_message = mess
                 log_path = Path(__file__).parent.parent / 'log' / 'message_log.txt'
                 log_path.parent.mkdir(parents=True, exist_ok=True)
