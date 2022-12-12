@@ -17,7 +17,8 @@ class ConfigManager:
             'user': '',
             'sound_file': '',
             'sleep_start': '',
-            'sleep_end': ''
+            'sleep_end': '',
+            'test_packet': b''
         }
         self.config = config
         self.save_config()
