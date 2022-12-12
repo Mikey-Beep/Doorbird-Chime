@@ -28,7 +28,7 @@ def write_config():
         config_manager.config['sleep_start'] = request.json['sleep_start']
         config_manager.config['sleep_end'] = request.json['sleep_end']
         try:
-            config_manager.config['test_packet'] = request.json['test_packet']
+            config_manager.config['test_packet'] = base64.b64decode(request.json['test_packet'].encode('ascii'))
         except:
             pass
         config_manager.save_config()
