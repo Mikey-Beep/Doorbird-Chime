@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, Response
 from test_broadcast import TestBroadcaster
 from config import ConfigManager
 
@@ -8,7 +8,8 @@ config_manager = ConfigManager()
 @app.route('/test_broadcast', methods = ['GET'])
 def test_broadcast():
     broadcaster = TestBroadcaster()
-    broadcaster.broadcast(config_manager.conf_path['test_packet'])
+    broadcaster.broadcast(config_manager.config['test_packet'])
+    return Response(status = 200)
 
 @app.route('/config', methods = ['POST'])
 def write_config():
@@ -22,5 +23,6 @@ def write_config():
     except:
         pass
     config_manager.save_config()
+    return Response(status = 200)
 
 app.run(host = '0.0.0.0', port = 80)
