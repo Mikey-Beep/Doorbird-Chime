@@ -21,19 +21,20 @@ class DoorbirdWatcher:
             except ValueError:
                 print('Not a doorbird message.')
                 continue
-            # See if this is a duplicate of the last message.
-            if mess == last_message:
-                print('Duplicate event.')
-                continue
-            # Store a copy of this message for future comparison.
-            last_message = mess
-            print(mess)
-            log_path = Path(__file__).parent.parent / 'log' / 'message_log.txt'
-            log_path.parent.mkdir(parents=True, exist_ok=True)
-            with log_path.open('w'):
-                log_path.write_text(f'{mess.message_bytes}\n')
             # Load config from file, this lets us dynamically update the config.
             conf = Config(Path(__file__).parent.parent / 'conf' / 'conf.yml')
+            # See if this is a duplicate of the last message.
+            if mess == last_message and mess != conf.test_message:
+                print('Duplicate event.')
+                continue
+            print(mess)
+            # Store a copy of this message for future comparison.
+            if mess != conf.test_message:
+                last_message = mess
+                log_path = Path(__file__).parent.parent / 'log' / 'message_log.txt'
+                log_path.parent.mkdir(parents=True, exist_ok=True)
+                with log_path.open('w'):
+                    log_path.write_text(f'{mess.message_bytes}\n')
             # Decode the message.
             try:
                 decoded = mess.decrypt(conf.password)

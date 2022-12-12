@@ -12,3 +12,4 @@ class Config:
         self.chime_sound = Path(__file__).parent.parent / 'sounds' / config['sound_file']
         self.sleep_start = config['sleep_start']
         self.sleep_end = config['sleep_end']
+        self.test_message = config['test_message']
