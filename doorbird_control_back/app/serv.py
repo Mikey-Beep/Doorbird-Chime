@@ -1,4 +1,4 @@
-import json
+import json, base64
 from pathlib import Path
 from flask import Flask, request, Response
 from test_broadcast import TestBroadcaster
@@ -18,7 +18,9 @@ def test_broadcast():
 @app.route('/config', methods = ['GET', 'POST'])
 def write_config():
     if request.method == 'GET':
-        return Response(status = 200, response = json.dumps(config_manager.config))
+        temp_conf = config_manager.config
+        temp_conf['test_packet'] = base64.b64encode(temp_conf['test_packet']).decode('ascii')
+        return Response(status = 200, response = json.dumps(temp_conf))
     elif request.method == 'POST':
         config_manager.config['user'] = request.json['user']
         config_manager.config['password'] = request.json['password']
