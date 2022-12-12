@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 from flask import Flask, request, Response
 from test_broadcast import TestBroadcaster
 from config import ConfigManager
@@ -31,5 +32,20 @@ def write_config():
 @app.route('/sound_files', methods = ['GET'])
 def list_sound_files():
     return Response(status = 200, response = json.dumps(sound_manager.list_sounds()))
+
+@app.route('/upload_sound', methods = ['POST'])
+def upload_file():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            return Response(status = 400)
+        file = request.files['file']
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if file.filename == '':
+            return Response(status = 400)
+        if file:
+            file.save(Path(__file__).parent.parent / 'sounds' / file.filename)
+            return Response(status = 200)
 
 app.run(host = '0.0.0.0', port = 80)
