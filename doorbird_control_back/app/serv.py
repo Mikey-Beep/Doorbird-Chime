@@ -12,15 +12,13 @@ sound_manager = SoundManager()
 @app.route('/test_broadcast', methods = ['GET'])
 def test_broadcast():
     broadcaster = TestBroadcaster()
-    broadcaster.broadcast(config_manager.config['test_packet'])
+    broadcaster.broadcast(base64.b64decode(config_manager.config['test_packet'].encode('ascii')))
     return Response(status = 200)
 
 @app.route('/config', methods = ['GET', 'POST'])
 def write_config():
     if request.method == 'GET':
-        temp_conf = config_manager.config
-        temp_conf['test_packet'] = base64.b64encode(temp_conf['test_packet']).decode('ascii')
-        return Response(status = 200, response = json.dumps(temp_conf))
+        return Response(status = 200, response = json.dumps(config_manager.config))
     elif request.method == 'POST':
         config_manager.config['user'] = request.json['user']
         config_manager.config['password'] = request.json['password']
@@ -28,8 +26,9 @@ def write_config():
         config_manager.config['sleep_start'] = request.json['sleep_start']
         config_manager.config['sleep_end'] = request.json['sleep_end']
         try:
-            config_manager.config['test_packet'] = base64.b64decode(request.json['test_packet'].encode('ascii'))
-        except:
+            config_manager.config['test_packet'] = request.json['test_packet']
+        except Exception as e:
+            print(e)
             pass
         config_manager.save_config()
         return Response(status = 200)
