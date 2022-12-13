@@ -1,3 +1,4 @@
+import base64
 from socket import *
 from config import Config
 from pathlib import Path
@@ -19,21 +20,22 @@ class DoorbirdWatcher:
             try:
                 mess = EncryptedMessage(mess)
             except ValueError:
-                print('Not a doorbird message.')
                 continue
-            # See if this is a duplicate of the last message.
-            if mess == last_message:
-                print('Duplicate event.')
-                continue
-            # Store a copy of this message for future comparison.
-            last_message = mess
-            print(mess)
-            log_path = Path(__file__).parent.parent / 'log' / 'message_log.txt'
-            log_path.parent.mkdir(parents=True, exist_ok=True)
-            with log_path.open('w'):
-                log_path.write_text(f'{mess.message_bytes}\n')
             # Load config from file, this lets us dynamically update the config.
             conf = Config(Path(__file__).parent.parent / 'conf' / 'conf.yml')
+            # See if this is a duplicate of the last message.
+            not_test_packet = mess != EncryptedMessage(base64.b64decode(conf.test_packet.encode('ascii')))
+            if mess == last_message and not_test_packet:
+                print('Duplicate event.')
+                continue
+            print(mess)
+            # Store a copy of this message for future comparison.
+            if not_test_packet:
+                last_message = mess
+                log_path = Path(__file__).parent.parent / 'log' / 'message_log.txt'
+                log_path.parent.mkdir(parents=True, exist_ok=True)
+                with log_path.open('w'):
+                    log_path.write_text(f'{mess.message_bytes}\n')
             # Decode the message.
             try:
                 decoded = mess.decrypt(conf.password)

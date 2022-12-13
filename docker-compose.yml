@@ -11,6 +11,15 @@ services:
       - doorbird-sounds:/etc/chime/sounds
     devices:
       - '/dev/snd:/dev/snd'
+  back:
+    build: ./doorbird_control_back
+    ports:
+      - '5004:80'
+    networks:
+      - doorbird-net
+    volumes:
+      - doorbird-conf:/etc/serv/conf
+      - doorbird-sounds:/etc/serv/sounds
 
 volumes:
   doorbird-conf: {}
