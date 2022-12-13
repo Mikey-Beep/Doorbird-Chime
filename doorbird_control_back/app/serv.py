@@ -37,8 +37,8 @@ def write_config():
 def list_sound_files():
     return Response(status = 200, response = json.dumps(sound_manager.list_sounds()))
 
-@app.route('/upload_sound', methods = ['POST'])
-def upload_file():
+@app.route('/sound_file', methods = ['POST'])
+def sound_file():
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
