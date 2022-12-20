@@ -11,6 +11,7 @@ services:
       - doorbird-sounds:/etc/chime/sounds
     devices:
       - '/dev/snd:/dev/snd'
+    restart: always
   back:
     build: ./doorbird_control_back
     ports:
@@ -20,6 +21,7 @@ services:
     volumes:
       - doorbird-conf:/etc/serv/conf
       - doorbird-sounds:/etc/serv/sounds
+    restart: always
 
 volumes:
   doorbird-conf: {}
