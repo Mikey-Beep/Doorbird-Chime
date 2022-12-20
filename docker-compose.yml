@@ -22,6 +22,14 @@ services:
       - doorbird-conf:/etc/serv/conf
       - doorbird-sounds:/etc/serv/sounds
     restart: always
+  front:
+    build: ./doorbird_control_front
+    ports:
+      - '80:80'
+      - '443:443'
+    networks:
+      - doorbird-net
+    restart: always
 
 volumes:
   doorbird-conf: {}
