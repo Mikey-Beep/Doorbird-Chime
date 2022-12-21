@@ -1,0 +1,119 @@
+openapi: 3.0.3
+info:
+  title: Doorbird Control API
+  description: |
+    Description goes here
+  version: 0.0.1
+tags:
+  - name: Testing
+    description: Testing the chime by pretending to be the doorbell.
+  - name: Configuration
+    description: View and change doorbell configuration.
+  - name: Chime Sounds
+    description: View and change the sounds the chime will play.
+paths:
+  /test_broadcast:
+    get:
+      tags:
+        - Testing
+      summary: Send a test broadcast.
+      description: Send a UDP broadcast of the test packet contained within the config.
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: No test packet configured.
+  /config:
+    get:
+      tags:
+        - Configuration
+      summary: Retrieve the current configuration.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Config'
+    post:
+      tags:
+        - Configuration
+      summary: Set a new configuration.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Config'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad config.
+  /sound_files:
+    get:
+      tags: 
+        - Chime Sounds
+      summary: List all known chime sound files.
+      responses:
+        '200':
+          description: OK
+  /sound_file:
+    post:
+      tags:
+        - Chime Sounds
+      summary: Upload a new chime sound file.
+      responses:
+        '200':
+          description: OK
+    delete:
+      tags:
+        - Chime Sounds
+      summary: Delete sound file.
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Sound file does not exist.
+    get:
+      tags:
+        - Chime Sounds
+      summary: Download chime sound file.
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Sound file does not exist.
+    put:
+      tags:
+        - Chime Sounds
+      summary: Replace chime sound file.
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Sound file does not exist.
+
+components:
+  schemas:
+    Config:
+      type: object
+      required:
+        - user
+        - password
+        - sound_file
+      properties:
+        user:
+          type: string
+        password:
+          type: string
+        sound_file:
+          type: string
+        sleep_start:
+          type: string
+          format: date-time
+        sleep_end:
+          type: string
+          format: date-time
+        test_packet:
+          type: string
