@@ -1,8 +1,9 @@
 openapi: 3.0.3
 info:
-  title: Doorbird Control API
+  title: Doorbird Chime Control API
   description: |
-    Description goes here
+    API for controlling the Doorbird Chime application, including running tests as if this was the doorbell
+    changing the sleep times, altering the chime sound and more.
   version: 0.0.1
 tags:
   - name: Testing
@@ -58,11 +59,21 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoundFileList'
   /sound_file:
     post:
       tags:
         - Chime Sounds
       summary: Upload a new chime sound file.
+      requestBody:
+        content:
+          audio/wav:
+            schema:
+              type: string
+              format: binary
       responses:
         '200':
           description: OK
@@ -117,3 +128,7 @@ components:
           format: date-time
         test_packet:
           type: string
+    SoundFileList:
+      type: array
+      items: 
+        type: string
