@@ -25,8 +25,8 @@ services:
   front:
     build: ./doorbird_control_front
     ports:
-      - '80:80'
-      - '443:443'
+      - '5005:80'
+      - '5006:443'
     networks:
       - doorbird-net
     restart: always
