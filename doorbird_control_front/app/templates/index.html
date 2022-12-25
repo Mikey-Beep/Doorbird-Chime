@@ -1,37 +1,132 @@
 <html>
- <head>
-  <title>Doorbird Control</title>
-  <meta charset="UTF-8">
-  <meta content="width=device-width, initial-scale=1">
-  <style>
-   body {
-    font-family: Arial;
-    margin: 0;
-    background: #A3C4BC;
-   }
-   .header {
-    padding: 30px;
-    text-align: center;
-    background: #413C58;
-    color: white;
-    font-size: 30px;
-   }
-   .content {
-    padding:20px;
-   }
-   .table {
-    background: #BFD7B5;
-   }
-   .tableheader {
-    background: #8B80F9;
-   }
-  </style>
- </head>
- <div class="header">
-  <h1>Doorbird Control</h1>
- </div>
- <body>
-  <div class="content">
-  </div>
- </body>
+    <head>
+    <title>Doorbird Control</title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1">
+        <style>
+        body {
+            font-family: Arial;
+            margin: 0;
+            background: #A3C4BC;
+        }
+        .header {
+            padding: 30px;
+            text-align: center;
+            background: #413C58;
+            color: white;
+            font-size: 30px;
+        }
+        .content {
+            padding:20px;
+        }
+        .table {
+            background: #BFD7B5;
+        }
+        .tableheader {
+            background: #8B80F9;
+        }
+        input[type=text], select {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type=submit] {
+            width: 100%;
+            background-color: #04AA6D;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type=submit]:hover {
+            background-color: #45a049;
+        }
+        button {
+            width: 100%;
+            background-color: #04AA6D;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .custom-file-upload {
+            width: 100%;
+            background-color: #04AA6D;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .custom-file-upload:hover {
+            background-color: #45a049;
+        }
+        </style>
+    </head>
+    <div class="header">
+        <h1>Doorbird Control</h1>
+    </div>
+    <body>
+        <div class="content">
+            <div>
+                <form>
+                    <div>
+                        <label for="uname">User Name</label>
+                        <input type="text" id="uname" name="uname">
+                    </div>
+                    <div>
+                        <label for="pword">Password</label>
+                        <input type="text" id="pword" name="pword">
+                    </div>
+                    <div>
+                        <label for="sfile">Sound File</label>
+                        <select id="sfile" name="sfile">
+                        </select>
+                    </div>
+                    <div>
+                        <label for="sstart">Sleep Start Time</label>
+                        <input type="text" id="sstart" name="sstart">
+                    </div>
+                    <div>
+                        <label for="send">Sleep End Time</label>
+                        <input type="text" id="send" name="send">
+                    </div>
+                    <div>
+                        <label for="tpacket">Test Packet</label>
+                        <input type="text" id="tpacket" name="tpacket">
+                    </div>
+                    <div>
+                        <input type="submit" value="Submit">
+                    </div>
+                </form>
+            </div>
+            <div>
+                <button>Send Test Packet</button>
+            </div>
+            <div>
+                <form>
+                    <label for="sfileupload" class="custom-file-upload">Upload Sound File</label>
+                    <input type="file" id="sfileupload" name="sfileupload"/>
+                </form>
+            </div>
+        </div>
+    </body>
 </html>
