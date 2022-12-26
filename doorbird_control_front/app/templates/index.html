@@ -11,7 +11,7 @@
     <body onload="populateConfig()">
         <div class="content">
             <div>
-                <form>
+                <form action="javascript:sendConfig()">
                     <div>
                         <label for="uname">User Name</label>
                         <input type="text" id="uname" name="uname">
@@ -87,5 +87,22 @@
                 document.getElementById("tpacket").value = jsonResponse.test_packet;
                 document.getElementById("sfile").value = jsonResponse.sound_file;
             });
+    }
+
+    function sendConfig(){
+        var data = {};
+        data.user = document.getElementById("uname").value;
+        data.password = document.getElementById("pword").value;
+        data.sleep_start = document.getElementById("sstart").value;
+        data.sleep_end = document.getElementById("send").value;
+        data.test_packet = document.getElementById("tpacket").value;
+        data.sound_file = document.getElementById("sfile").value;
+        fetch("/send_config", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
     }
 </script>

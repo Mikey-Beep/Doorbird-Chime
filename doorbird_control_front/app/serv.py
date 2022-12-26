@@ -24,7 +24,7 @@ def get_config():
 @app.route('/send_config', methods = ['POST'])
 def send_config():
     url = 'http://back/config'
-    requests.request("POST", url, data=json.dumps(request.json))
+    requests.request("POST", url, json=request.json)
     return Response(status = 200)
 
 @app.route('/get_sounds')
