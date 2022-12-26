@@ -8,7 +8,7 @@
     <div class="header">
         <h1>Doorbird Control</h1>
     </div>
-    <body>
+    <body onload="populateConfig()">
         <div class="content">
             <div>
                 <form>
@@ -57,8 +57,35 @@
 
 <script>
     function sendTest(){
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open( "GET", "/send_test", false );
-        xmlHttp.send( null );
+        fetch("/send_test");
+    }
+
+    function populateConfig(){
+        fetch("/get_sounds")
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(jsonResponse) {
+                var select = document.getElementById("sfile");
+                for(var i = 0; i < jsonResponse.length; i++) {
+                    var opt = jsonResponse[i];
+                    var el = document.createElement("option");
+                    el.textContent = opt;
+                    el.value = opt;
+                    select.appendChild(el);
+                }
+            });
+        fetch("/get_config")
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(jsonResponse) {
+                document.getElementById("uname").value = jsonResponse.user;
+                document.getElementById("pword").value = jsonResponse.password;
+                document.getElementById("sstart").value = jsonResponse.sleep_start;
+                document.getElementById("send").value = jsonResponse.sleep_end;
+                document.getElementById("tpacket").value = jsonResponse.test_packet;
+                document.getElementById("sfile").value = jsonResponse.sound_file;
+            });
     }
 </script>
