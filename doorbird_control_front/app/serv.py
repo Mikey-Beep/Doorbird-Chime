@@ -27,6 +27,15 @@ def send_config():
     requests.request("POST", url, json=request.json)
     return Response(status = 200)
 
+@app.route('/send_sound', methods = ['POST'])
+def send_sound():
+    requests.request(
+        method='POST',
+        url='http://back/sound_file',
+        files={k: (v.filename, v.stream, v.content_type, v.headers) for k, v in request.files.items()}
+    )
+    return Response(status = 200)
+
 @app.route('/get_sounds')
 def get_sounds():
     url = 'http://back/sound_files'

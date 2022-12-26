@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
     <head>
         <title>Doorbird Control</title>
@@ -11,7 +12,7 @@
     <body onload="populateConfig()">
         <div class="content">
             <div>
-                <form action="javascript:sendConfig()">
+                <form action="javascript:sendConfig()" autocomplete="off">
                     <div>
                         <label for="uname">User Name</label>
                         <input type="text" id="uname" name="uname">
@@ -46,9 +47,14 @@
                 <button onclick="sendTest()" id="sendtest">Send Test Packet</button>
             </div>
             <div>
-                <form>
-                    <label for="sfileupload" class="custom-file-upload">Upload Sound File</label>
-                    <input type="file" id="sfileupload" name="sfileupload"/>
+                <form action="javascript:sendSound()" method="post" enctype="multipart/form-data">
+                    <!--<label for="sfileupload" class="custom-file-upload">Upload Sound File</label>-->
+                    <div>
+                        <input type="file" id="sfileupload" name="sfileupload"/>
+                    </div>
+                    <div>
+                        <input type="submit" value="Upload"/>
+                    </div>
                 </form>
             </div>
         </div>
@@ -103,6 +109,18 @@
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(data)
+        });
+        alert("Config updated.");
+    }
+
+    function sendSound(){
+        let formData = new FormData();
+        formData.append("file", document.getElementById("sfileupload").files[0]);
+        fetch("/send_sound", {
+            method: "POST",
+            body: formData
+        }).then(function(response) {
+            populateConfig();
         });
     }
 </script>

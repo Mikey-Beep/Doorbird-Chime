@@ -54,9 +54,6 @@ button {
 button:hover {
     background-color: #45a049;
 }
-input[type="file"] {
-    display: none;
-}
 .custom-file-upload {
     width: 100%;
     background-color: #04AA6D;
