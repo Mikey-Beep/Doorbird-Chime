@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response, request
 import requests, json
 
 app = Flask(__name__)
@@ -20,6 +20,12 @@ def get_config():
     url = 'http://back/config'
     resp = requests.request("GET", url, data='')
     return Response(status = 200, response = json.dumps(resp.json()))
+
+@app.route('/send_config', methods = ['POST'])
+def send_config():
+    url = 'http://back/config'
+    requests.request("POST", url, data=json.dumps(request.json))
+    return Response(status = 200)
 
 @app.route('/get_sounds')
 def get_sounds():
