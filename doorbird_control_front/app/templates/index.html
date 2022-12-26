@@ -43,9 +43,7 @@
                 </form>
             </div>
             <div>
-                <form action="/send_test">
-                    <input type="submit" value="Send Test Packet"/>
-                </form>
+                <button onclick="sendTest()" id="sendtest">Send Test Packet</button>
             </div>
             <div>
                 <form>
@@ -56,3 +54,11 @@
         </div>
     </body>
 </html>
+
+<script>
+    function sendTest(){
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open( "GET", "/send_test", false );
+        xmlHttp.send( null );
+    }
+</script>
