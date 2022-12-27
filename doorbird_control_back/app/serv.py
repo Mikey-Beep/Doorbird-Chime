@@ -9,6 +9,13 @@ app = Flask(__name__)
 config_manager = ConfigManager()
 sound_manager = SoundManager()
 
+@app.route('/api/docs', methods = ['GET'])
+def serv_api():
+    api_path: Path = Path(__file__).parent.parent / 'openapi' / 'openapi.yaml'
+    with api_path.open() as api_file:
+        file_content = api_file.read()
+    return Response(status = 200, response = file_content)
+
 @app.route('/test_broadcast', methods = ['GET'])
 def test_broadcast():
     broadcaster = TestBroadcaster()
