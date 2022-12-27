@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Doorbird Control</title>
+        <meta charset="UTF-8"/>
+        <meta content="width=device-width, initial-scale=1"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    </head>
+    <div class="header">
+        <h1>Doorbird Control</h1>
+    </div>
+    <body onload="populateConfig()">
+        <div class="content">
+            <div>
+                <form action="javascript:sendConfig()" autocomplete="off">
+                    <div>
+                        <label for="uname">User Name</label>
+                        <input type="text" id="uname" name="uname">
+                    </div>
+                    <div>
+                        <label for="pword">Password</label>
+                        <input type="password" id="pword" name="pword">
+                    </div>
+                    <div>
+                        <label for="sfile">Sound File</label>
+                        <select id="sfile" name="sfile">
+                        </select>
+                    </div>
+                    <div>
+                        <label for="sstart">Sleep Start Time</label>
+                        <input type="text" id="sstart" name="sstart">
+                    </div>
+                    <div>
+                        <label for="send">Sleep End Time</label>
+                        <input type="text" id="send" name="send">
+                    </div>
+                    <div>
+                        <label for="tpacket">Test Packet</label>
+                        <input type="text" id="tpacket" name="tpacket">
+                    </div>
+                    <div>
+                        <input type="submit" value="Submit">
+                    </div>
+                </form>
+            </div>
+            <div>
+                <button onclick="sendTest()" id="sendtest">Send Test Packet</button>
+            </div>
+            <div>
+                <form action="javascript:sendSound()" method="post" enctype="multipart/form-data">
+                    <!--<label for="sfileupload" class="custom-file-upload">Upload Sound File</label>-->
+                    <div>
+                        <input type="file" id="sfileupload" name="sfileupload"/>
+                    </div>
+                    <div>
+                        <input type="submit" value="Upload"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
+
+<script>
+    function sendTest(){
+        fetch("/send_test");
+    }
+
+    async function populateConfig(){
+        await fetch("/get_sounds")
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(jsonResponse) {
+                var select = document.getElementById("sfile");
+                var i, L = select.options.length - 1;
+                for(i = L; i >= 0; i--) {
+                    select.remove(i);
+                }
+                for(var i = 0; i < jsonResponse.length; i++) {
+                    var opt = jsonResponse[i];
+                    var el = document.createElement("option");
+                    el.textContent = opt;
+                    el.value = opt;
+                    select.appendChild(el);
+                }
+            });
+        fetch("/get_config")
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(jsonResponse) {
+                document.getElementById("uname").value = jsonResponse.user;
+                document.getElementById("pword").value = jsonResponse.password;
+                document.getElementById("sstart").value = jsonResponse.sleep_start;
+                document.getElementById("send").value = jsonResponse.sleep_end;
+                document.getElementById("tpacket").value = jsonResponse.test_packet;
+                document.getElementById("sfile").value = jsonResponse.sound_file;
+            });
+    }
+
+    function sendConfig(){
+        var data = {};
+        data.user = document.getElementById("uname").value;
+        data.password = document.getElementById("pword").value;
+        data.sleep_start = document.getElementById("sstart").value;
+        data.sleep_end = document.getElementById("send").value;
+        data.test_packet = document.getElementById("tpacket").value;
+        data.sound_file = document.getElementById("sfile").value;
+        fetch("/send_config", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+        alert("Config updated.");
+    }
+
+    function sendSound(){
+        let formData = new FormData();
+        formData.append("file", document.getElementById("sfileupload").files[0]);
+        fetch("/send_sound", {
+            method: "POST",
+            body: formData
+        }).then(function(response) {
+            populateConfig();
+        });
+    }
+</script>
