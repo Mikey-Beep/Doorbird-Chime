@@ -66,8 +66,8 @@
         fetch("/send_test");
     }
 
-    function populateConfig(){
-        fetch("/get_sounds")
+    async function populateConfig(){
+        await fetch("/get_sounds")
             .then(function(response) {
                 return response.json();
             })
