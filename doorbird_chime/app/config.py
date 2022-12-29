@@ -1,5 +1,6 @@
+import yaml, base64
 from pathlib import Path
-import yaml
+from encrypted_message import EncryptedMessage
 
 class Config:
     def __init__(self, conf_path: Path):
@@ -10,7 +11,7 @@ class Config:
         self.password = config['password']
         self.user = config['user']
         # Get the chime sound file from the sounds directory.
-        self.chime_sound = Path(__file__).parent.parent / 'sounds' / config['sound_file']
+        self.chime_sound_path = Path(__file__).parent.parent / 'sounds' / config['sound_file']
         self.sleep_start = config['sleep_start']
         self.sleep_end = config['sleep_end']
-        self.test_packet = config['test_packet']
+        self.test_message = EncryptedMessage(base64.b64decode(config['test_packet'].encode('ascii')))
