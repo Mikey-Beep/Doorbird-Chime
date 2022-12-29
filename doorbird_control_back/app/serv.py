@@ -59,4 +59,19 @@ def sound_file():
             file.save(Path(__file__).parent.parent / 'sounds' / file.filename)
             return Response(status = 200)
 
+@app.route('/log', methods = ['GET'])
+def get_log():
+    log_path = Path(__file__).parent.parent / 'log' / 'log.txt'
+    log_data = []
+    with log_path.open() as log_file:
+        for line in log_file:
+            line = line.strip().split('\u16bc')
+            log_item = {
+                'user': line[0],
+                'event': line[1],
+                'timestamp': line[2]
+            }
+            log_data.append(log_item)
+    return Response(status = 200, response = json.dumps(log_data))
+
 app.run(host = '0.0.0.0', port = 80)
