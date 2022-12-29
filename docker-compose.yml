@@ -31,6 +31,12 @@ services:
     networks:
       - doorbird-net
     restart: always
+  motion:
+    build: ./doorbird_motion
+    networks:
+      - doorbird-net
+    volumes:
+      - doorbird-conf:/etc/serv/conf
 
 volumes:
   doorbird-conf: {}
