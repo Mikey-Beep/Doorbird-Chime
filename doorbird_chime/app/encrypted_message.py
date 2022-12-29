@@ -3,7 +3,7 @@ from nacl import pwhash, secret, bindings
 from decrypted_message import DecryptedMessage
 
 class EncryptedMessage:
-    def __init__(self, message_bytes = b'\xde\xad\xbe\x01'):
+    def __init__(self, message_bytes: bytes = b'\xde\xad\xbe\x01'):
         self.message_bytes = message_bytes
         # Check for the doorbird signature.
         if message_bytes[:4] != b'\xde\xad\xbe\x01':
@@ -11,6 +11,7 @@ class EncryptedMessage:
         # This is the doorbird signature in its individual pieces.
         self.ident = message_bytes[:3]
         self.version = message_bytes[3]
+        #Allow creation of a dummy message if it lacks the remainder of the payload.
         try:
             # Try to get the decryption variables and encrypted cyphertext.
             self.opslimit = int.from_bytes(message_bytes[4:8], 'big')
@@ -26,7 +27,15 @@ class EncryptedMessage:
         return self.message_bytes == other.message_bytes
 
     def __str__(self) -> str:
-        return f'IDENT {self.ident}\nVERSION {self.version}\nOPSLIMIT {self.opslimit}\nMEMLIMIT {self.memlimit}\nSALT {self.salt}\nNONCE {self.nonce}\nCIPHERTEXT {self.ciphertext}'
+        return '\n'.join([
+            f'IDENT: {self.ident}',
+            f'VERSION: {self.version}',
+            f'OPSLIMIT: {self.opslimit}',
+            f'MEMLIMIT: {self.memlimit}',
+            f'SALT: {self.salt}',
+            f'NONCE: {self.nonce}',
+            f'CIPHERTEXT: {self.ciphertext}'
+        ])
 
     def decrypt(self, passwd: str) -> DecryptedMessage:
         """

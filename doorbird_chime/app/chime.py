@@ -8,7 +8,7 @@ except:
 
 class Chime:
     def __init__(self, conf: Config):
-        # Set the sound fille from the config.
+        # Set the sound file from the config.
         self.sound_file = conf.chime_sound
         # Get the start time and end time for the sleep period.
         self.sleep_start_time = time(*list(map(int, conf.sleep_start.split(':'))))
@@ -20,8 +20,9 @@ class Chime:
             print('Inside sleep time, not making a sound.')
             return
         #Try and play a sound using winsound, if that fails try aplay for linux.
-        print('Playing chime.')
         try:
+            print('Trying to play chime using winsound.')
             winsound.PlaySound(self.sound_file, winsound.SND_FILENAME)
         except:
+            print(f'Winsound failed, trying aplay.')
             os.system(f'aplay -D plughw:1,0 {self.sound_file}')

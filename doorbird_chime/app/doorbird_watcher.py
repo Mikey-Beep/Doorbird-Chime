@@ -6,7 +6,7 @@ from encrypted_message import EncryptedMessage
 from chime import Chime
 
 class DoorbirdWatcher:
-    def __init__(self, port: int):
+    def __init__(self, port: int = 6524):
         self.socket = socket(AF_INET, SOCK_DGRAM)
         self.socket.bind(('', port))
     
@@ -50,5 +50,5 @@ class DoorbirdWatcher:
 
 
 if __name__ == '__main__':
-    watcher = DoorbirdWatcher(6524)
+    watcher = DoorbirdWatcher()
     watcher.watch()
