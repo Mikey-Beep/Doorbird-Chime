@@ -7,12 +7,12 @@ except:
     import os
 
 class Chime:
-    def __init__(self, chime_path: Path, sleep_start_time: str, sleep_end_time: str):
+    def __init__(self, chime_path: Path, sleep_start_time: time, sleep_end_time: time):
         # Set the sound file from the config.
         self.sound_file = chime_path
         # Get the start time and end time for the sleep period.
-        self.sleep_start_time = time(*list(map(int, sleep_start_time.split(':'))))
-        self.sleep_end_time = time(*list(map(int, sleep_end_time.split(':'))))
+        self.sleep_start_time = sleep_start_time
+        self.sleep_end_time = sleep_end_time
 
     def make_noise(self):
         #Check that we are outside of the sleep time.
