@@ -20,6 +20,7 @@ services:
       - doorbird-net
     volumes:
       - doorbird-conf:/etc/serv/conf
+      - doorbird-log:/etc/serv/log
       - doorbird-sounds:/etc/serv/sounds
     restart: always
   front:
