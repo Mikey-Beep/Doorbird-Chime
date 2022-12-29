@@ -5,6 +5,7 @@ from logger import DoorbirdLogger
 from chime import Chime
 from config import Config
 from pathlib import Path
+import requests
 
 if __name__ == '__main__':
     last_message = EncryptedMessage()
@@ -29,3 +30,9 @@ if __name__ == '__main__':
             print('Matched user name and this is a button press!')
             chime = Chime(config.chime_sound_path, config.sleep_start, config.sleep_end)
             chime.make_noise()
+        elif config.user[:6] == decrypted_message.id:
+            print('Matched user and this is a motion event.')
+            try:
+                requests.request('GET', 'http://motion/motion')
+            except:
+                pass
