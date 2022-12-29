@@ -17,6 +17,7 @@ if __name__ == '__main__':
         if encrypted_message == last_message and encrypted_message != config.test_message:
             print('Received a duplicate message, skipping it.')
             continue
+        last_message = encrypted_message
         try:
             decrypted_message = encrypted_message.decrypt(config.password)
         except:
