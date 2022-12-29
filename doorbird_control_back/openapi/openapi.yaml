@@ -12,6 +12,8 @@ tags:
     description: View and change doorbell configuration.
   - name: Chime Sounds
     description: View and change the sounds the chime will play.
+  - name: Logging
+    description: View logged events.
 paths:
   /test_broadcast:
     get:
@@ -104,6 +106,18 @@ paths:
           description: OK
         '404':
           description: Sound file does not exist.
+  /log:
+    get:
+      tags:
+        - Logging
+      summary: Fetch all logs.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogList'
 
 components:
   schemas:
@@ -132,3 +146,18 @@ components:
       type: array
       items: 
         type: string
+    LogList:
+      type: array
+      items:
+        type: object
+        $ref: '#/components/schemas/LogObj'
+    LogObj:
+      type: object
+      properties:
+        user:
+          type: string
+        event:
+          type: string
+        timestamp:
+          type: string
+          format: date-time

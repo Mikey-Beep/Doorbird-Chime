@@ -2,7 +2,7 @@ from __future__ import annotations
 from datetime import *
 
 class DecryptedMessage:
-    def __init__(self, cleartext):
+    def __init__(self, cleartext: bytes):
         self.cleartext = cleartext
         # The ID of the device sending the alert.
         self.id = cleartext[:6].decode('utf-8')
@@ -15,4 +15,4 @@ class DecryptedMessage:
         return self.cleartext == other.cleartext
 
     def __str__(self) -> str:
-        return f'ID {self.id}\nEVENT {self.event}\nTIMESTAMP {self.timestamp}'
+        return f'ID: {self.id}\nEVENT: {self.event}\nTIMESTAMP: {self.timestamp}'
