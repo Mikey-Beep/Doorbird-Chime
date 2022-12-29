@@ -10,5 +10,6 @@ class DoorbirdLogger:
             log_file.write('\u16bc'.join([
                 message.id,
                 message.event,
-                message.timestamp
+                str(message.timestamp)
             ]))
+            log_file.write('\n')
