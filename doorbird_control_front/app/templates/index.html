@@ -39,6 +39,10 @@
                         <input type="text" id="tpacket" name="tpacket">
                     </div>
                     <div>
+                        <label for="doorbelladdr">Doorbell IP Address</label>
+                        <input type="text" id="doorbelladdr" name="doorbelladdr"/>
+                    </div>
+                    <div>
                         <input type="submit" value="Submit">
                     </div>
                 </form>
@@ -96,6 +100,7 @@
                 document.getElementById("send").value = jsonResponse.sleep_end;
                 document.getElementById("tpacket").value = jsonResponse.test_packet;
                 document.getElementById("sfile").value = jsonResponse.sound_file;
+                document.getElementById("doorbelladdr").value = jsonResponse.doorbell_address;
             });
     }
 
@@ -107,6 +112,7 @@
         data.sleep_end = document.getElementById("send").value;
         data.test_packet = document.getElementById("tpacket").value;
         data.sound_file = document.getElementById("sfile").value;
+        data.doorbell_address = document.getElementById("doorbelladdr").value;
         fetch("/send_config", {
             method: "POST",
             headers: {

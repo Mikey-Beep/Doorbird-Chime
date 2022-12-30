@@ -12,7 +12,7 @@ def record_motion():
     config = Config(config_path)
     session = requests.Session()
     session.auth = (config.user, config.password)
-    response = session.get(f'{config.doorbell_address}/bha-api/image.cgi')
+    response = session.get(f'http://{config.doorbell_address}/bha-api/image.cgi')
     print(response.content)
     return Response(status = 200)
 
