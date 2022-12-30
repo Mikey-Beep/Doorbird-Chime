@@ -6,8 +6,11 @@ class DoorbirdLogger:
         self.log_path = Path(__file__).parent.parent / 'log' / 'log.txt'
 
     def log(self, message: DecryptedMessage):
-        with self.log_path.open() as log_file:
-            logs = [line.strip() for line in log_file]
+        try:
+            with self.log_path.open() as log_file:
+                logs = [line.strip() for line in log_file]
+        except:
+            logs = []
         with self.log_path.open('w+') as log_file:
             logs.append('\u16bc'.join([
                 message.id,
