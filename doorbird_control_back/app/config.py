@@ -18,7 +18,8 @@ class ConfigManager:
             'sound_file': '',
             'sleep_start': '',
             'sleep_end': '',
-            'test_packet': ''
+            'test_packet': '',
+            'doorbell_address': ''
         }
         self.config = config
         self.save_config()

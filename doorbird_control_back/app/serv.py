@@ -37,6 +37,7 @@ def write_config():
         except Exception as e:
             print(e)
             pass
+        config_manager.config['doorbell_address'] = request.json['doorbell_address']
         config_manager.save_config()
         return Response(status = 200)
 
