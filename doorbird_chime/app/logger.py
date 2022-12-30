@@ -9,7 +9,7 @@ class DoorbirdLogger:
         try:
             with self.log_path.open() as log_file:
                 logs = [line.strip() for line in log_file]
-        except:
+        except FileNotFoundError:
             logs = []
         with self.log_path.open('w+') as log_file:
             logs.append('\u16bc'.join([
