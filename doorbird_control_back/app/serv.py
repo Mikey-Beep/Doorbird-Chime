@@ -2,11 +2,12 @@ import json, base64
 from pathlib import Path
 from flask import Flask, request, Response
 from test_broadcast import TestBroadcaster
-from config import ConfigManager
+from config import Config
 from sounds import SoundManager
 
 app = Flask(__name__)
-config_manager = ConfigManager()
+config_path = Path(__file__).parent.parent / 'conf' / 'conf.yml'
+config = Config.from_yaml(config_path)
 sound_manager = SoundManager()
 
 @app.route('/api/docs', methods = ['GET'])
@@ -19,26 +20,17 @@ def serv_api():
 @app.route('/test_broadcast', methods = ['GET'])
 def test_broadcast():
     broadcaster = TestBroadcaster()
-    broadcaster.broadcast(base64.b64decode(config_manager.config['test_packet'].encode('ascii')))
+    broadcaster.broadcast(base64.b64decode(config.test_packet.encode('ascii')))
     return Response(status = 200)
 
 @app.route('/config', methods = ['GET', 'POST'])
 def write_config():
     if request.method == 'GET':
-        return Response(status = 200, response = json.dumps(config_manager.config))
+        return Response(status = 200, response = json.dumps(config.__dict__))
     elif request.method == 'POST':
-        config_manager.config['user'] = request.json['user']
-        config_manager.config['password'] = request.json['password']
-        config_manager.config['sound_file'] = request.json['sound_file']
-        config_manager.config['sleep_start'] = request.json['sleep_start']
-        config_manager.config['sleep_end'] = request.json['sleep_end']
-        try:
-            config_manager.config['test_packet'] = request.json['test_packet']
-        except Exception as e:
-            print(e)
-            pass
-        config_manager.config['log_rotation_length'] = request.json['log_rotation_length']
-        config_manager.save_config()
+        config.update(request.json)
+        with config_path.open('w') as config_file:
+            config_file.write(config.to_yaml())
         return Response(status = 200)
 
 @app.route('/sound_files', methods = ['GET'])
