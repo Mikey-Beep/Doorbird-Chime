@@ -5,7 +5,7 @@ class DoorbirdLogger:
     def __init__(self):
         self.log_path = Path(__file__).parent.parent / 'log' / 'log.txt'
 
-    def log(self, message: DecryptedMessage):
+    def log(self, message: DecryptedMessage, log_rotation_length: int):
         try:
             with self.log_path.open() as log_file:
                 logs = [line.strip() for line in log_file]
@@ -17,4 +17,4 @@ class DoorbirdLogger:
                 message.event,
                 str(message.timestamp)
             ]))
-            log_file.write('\n'.join(logs[-100:]))
+            log_file.write('\n'.join(logs[-log_rotation_length:]))
