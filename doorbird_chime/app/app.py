@@ -24,7 +24,7 @@ if __name__ == '__main__':
             print('Failed to decrypt message, skipping it.')
             continue
         if encrypted_message != config.test_message:
-            logger.log(decrypted_message)
+            logger.log(decrypted_message, config.log_rotation_length)
         if config.user[:6] == decrypted_message.id and not decrypted_message.event.startswith('motion'):
             print('Matched user name and this is a button press!')
             chime = Chime(config.chime_sound_path, config.sleep_start, config.sleep_end)

@@ -37,6 +37,7 @@ def write_config():
         except Exception as e:
             print(e)
             pass
+        config_manager.config['log_rotation_length'] = request.json['log_rotation_length']
         config_manager.save_config()
         return Response(status = 200)
 
