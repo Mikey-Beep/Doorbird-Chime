@@ -142,6 +142,8 @@ components:
           format: date-time
         test_packet:
           type: string
+        log_rotation_length:
+          type: integer
     SoundFileList:
       type: array
       items: 

@@ -16,3 +16,4 @@ class Config:
         self.sleep_start =  time(*list(map(int, config['sleep_start'].split(':'))))
         self.sleep_end = time(*list(map(int, config['sleep_end'].split(':'))))
         self.test_message = EncryptedMessage(base64.b64decode(config['test_packet'].encode('ascii')))
+        self.log_rotation_length = config['log_rotation_length']

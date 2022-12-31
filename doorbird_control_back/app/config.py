@@ -18,7 +18,8 @@ class ConfigManager:
             'sound_file': '',
             'sleep_start': '',
             'sleep_end': '',
-            'test_packet': ''
+            'test_packet': '',
+            'log_rotation_length': 100
         }
         self.config = config
         self.save_config()
