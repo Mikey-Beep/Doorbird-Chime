@@ -1,0 +1,9 @@
+FROM alpine:latest
+COPY requirements.txt requirements.txt
+RUN apk add --no-cache --virtual .pynacl_deps build-base python3-dev libffi-dev py-pip && \
+    apk add --no-cache python3 && \
+    pip install -r requirements.txt && \
+    apk del .pynacl_deps
+COPY . /etc/core
+WORKDIR /etc/core
+CMD ["python3", "-u", "app/app.py"]

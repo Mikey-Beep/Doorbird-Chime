@@ -1,18 +1,24 @@
 services:
-  chime:
-    build: ./doorbird_chime
+  core:
+    build: ./doorbird_core
+    networks:
+      - doorbird-net
     ports:
       - '6524:6524/udp'
+    volumes:
+      - doorbird-conf:/etc/core/conf
+      - doorbird-log:/etc/core/log
+    restart: always
+  chime:
+    build: ./doorbird_chime
     networks:
       - doorbird-net
     volumes:
-      - doorbird-conf:/etc/chime/conf
-      - doorbird-log:/etc/chime/log
       - doorbird-sounds:/etc/chime/sounds
     devices:
       - '/dev/snd:/dev/snd'
     restart: always
-  back:
+  control-back:
     build: ./doorbird_control_back
     ports:
       - '5004:80'
@@ -23,7 +29,7 @@ services:
       - doorbird-log:/etc/serv/log
       - doorbird-sounds:/etc/serv/sounds
     restart: always
-  front:
+  control-front:
     build: ./doorbird_control_front
     ports:
       - '5005:80'
