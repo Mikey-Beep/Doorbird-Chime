@@ -11,6 +11,8 @@ services:
     restart: always
   chime:
     build: ./doorbird_chime
+    depends_on:
+      - core
     networks:
       - doorbird-net
     volumes:
@@ -20,6 +22,8 @@ services:
     restart: always
   control-back:
     build: ./doorbird_control_back
+    depends_on:
+      - core
     ports:
       - '5004:80'
     networks:
@@ -30,6 +34,9 @@ services:
       - doorbird-sounds:/etc/serv/sounds
     restart: always
   control-front:
+    depends_on:
+      - core
+      - control-back
     build: ./doorbird_control_front
     ports:
       - '5005:80'

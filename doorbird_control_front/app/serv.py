@@ -10,20 +10,20 @@ def index():
 
 @app.route('/send_test')
 def send_test_packet():
-    url = 'http://back/test_broadcast'
+    url = 'http://control-back/test_broadcast'
     response = requests.request("GET", url, data='')
     print(response.text)
     return render_template('index.html')
 
 @app.route('/get_config')
 def get_config():
-    url = 'http://back/config'
+    url = 'http://control-back/config'
     resp = requests.request("GET", url, data='')
     return Response(status = 200, response = json.dumps(resp.json()))
 
 @app.route('/send_config', methods = ['POST'])
 def send_config():
-    url = 'http://back/config'
+    url = 'http://control-back/config'
     requests.request("POST", url, json=request.json)
     return Response(status = 200)
 
@@ -31,14 +31,14 @@ def send_config():
 def send_sound():
     requests.request(
         method='POST',
-        url='http://back/sound_file',
+        url='http://control-back/sound_file',
         files={k: (v.filename, v.stream, v.content_type, v.headers) for k, v in request.files.items()}
     )
     return Response(status = 200)
 
 @app.route('/get_sounds')
 def get_sounds():
-    url = 'http://back/sound_files'
+    url = 'http://control-back/sound_files'
     resp = requests.request("GET", url, data='')
     return Response(status = 200, response = json.dumps(resp.json()))
 
