@@ -1,9 +1,7 @@
 FROM alpine:latest
 COPY requirements.txt requirements.txt
-RUN apk add --no-cache --virtual .pynacl_deps build-base python3-dev libffi-dev py-pip && \
-    apk add --no-cache python3 alsa-utils && \
-    pip install -r requirements.txt && \
-    apk del .pynacl_deps
+RUN apk add --no-cache python3 py-pip alsa-utils && \
+    pip install -r requirements.txt
 COPY . /etc/chime
 WORKDIR /etc/chime
-CMD ["python3", "-u", "app/app.py"]
+CMD ["python3", "-u", "app/serv.py"]

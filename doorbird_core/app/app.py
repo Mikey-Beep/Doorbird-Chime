@@ -2,9 +2,10 @@ from encrypted_message import EncryptedMessage
 from decrypted_message import DecryptedMessage
 from doorbird_watcher import DoorbirdWatcher
 from logger import DoorbirdLogger
-from chime import Chime
 from config import Config
 from pathlib import Path
+from datetime import *
+import requests
 
 def load_config(config_path: Path):
     try:
@@ -17,6 +18,13 @@ def load_config(config_path: Path):
         with config_path.open('w') as config_file:
             config_file.write(config.to_yaml())
     return config
+
+def send_chime_req(sleep_start_time: time, sleep_end_time: time, sound_file: str):
+    if datetime.now().time() > sleep_start_time or datetime.now().time() < sleep_end_time:
+            print('Inside sleep time, not making a sound.')
+            return
+    url = 'http://chime/chime'
+    requests.request("POST", url, json={'sound_file': sound_file})
 
 if __name__ == '__main__':
     last_message = EncryptedMessage()
@@ -40,5 +48,4 @@ if __name__ == '__main__':
             logger.log(decrypted_message, config.log_rotation_length)
         if config.user[:6] == decrypted_message.id and not decrypted_message.event.startswith('motion'):
             print('Matched user name and this is a button press!')
-            chime = Chime(config.chime_sound_path, config.sleep_start, config.sleep_end)
-            chime.make_noise()
+            send_chime_req(config.sleep_start, config.sleep_end, config.sound_file)

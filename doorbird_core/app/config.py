@@ -4,12 +4,10 @@ from pathlib import Path
 from encrypted_message import EncryptedMessage
 
 class Config:
-    SOUND_DIR_PATH = Path(__file__).parent.parent / 'sounds'
-
     def __init__(self):
         self.password = ''
         self.user = ''
-        self.chime_sound_path = self.SOUND_DIR_PATH / 'chime.wav'
+        self.sound_file = 'chime.wav'
         self.sleep_start = time(0, 0)
         self.sleep_end = time(0, 0)
         self.test_message = EncryptedMessage()
@@ -27,7 +25,7 @@ class Config:
             new_config.user = config['user']
         except: pass
         try:
-            new_config.chime_sound_path = cls.SOUND_DIR_PATH / config['sound_file']
+            new_config.sound_file = config['sound_file']
         except: pass
         try:
             new_config.sleep_start =  time.fromisoformat(config['sleep_start'])
@@ -47,7 +45,7 @@ class Config:
         output = {}
         output['password'] = self.password
         output['user'] = self.user
-        output['sound_file'] = self.chime_sound_path.name
+        output['sound_file'] = self.sound_file
         output['sleep_start'] = self.sleep_start.isoformat()
         output['sleep_end'] = self.sleep_end.isoformat()
         output['test_packet'] = base64.b64encode(self.test_message.message_bytes).decode('ascii')
