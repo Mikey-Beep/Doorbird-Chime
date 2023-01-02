@@ -37,7 +37,7 @@ class Config:
             new_config.test_message = EncryptedMessage(base64.b64decode(config['test_packet'].encode('ascii')))
         except: pass
         try:
-            new_config.log_rotation_length = config['log_rotation_length']
+            new_config.log_rotation_length = int(config['log_rotation_length'])
         except: pass
         return new_config
     
