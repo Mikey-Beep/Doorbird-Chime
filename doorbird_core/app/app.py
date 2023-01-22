@@ -30,6 +30,8 @@ if __name__ == '__main__':
     last_message = EncryptedMessage()
     config_path = Path(__file__).parent.parent / 'conf' / 'conf.yml'
     config = load_config(config_path)
+    with config_path.open('w') as config_file:
+        config_file.write(config.to_yaml())
     watcher = DoorbirdWatcher()
     logger = DoorbirdLogger()
     while 1:

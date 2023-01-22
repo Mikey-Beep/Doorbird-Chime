@@ -43,6 +43,10 @@
                         <input type="number" id="logrotate" name="logrotate"/>
                     </div>
                     <div>
+                        <label for="doorbellip">Doorbell IP Address</label>
+                        <input type="text" id="doorbellip" name="doorbellip"/>
+                    </div>
+                    <div>
                         <input type="submit" value="Submit">
                     </div>
                 </form>
@@ -101,6 +105,7 @@
                 document.getElementById("tpacket").value = jsonResponse.test_packet;
                 document.getElementById("sfile").value = jsonResponse.sound_file;
                 document.getElementById("logrotate").value = jsonResponse.log_rotation_length;
+                document.getElementById("doorbellip").value = jsonResponse.doorbell_ip
             });
     }
 
@@ -113,6 +118,7 @@
         data.test_packet = document.getElementById("tpacket").value;
         data.sound_file = document.getElementById("sfile").value;
         data.log_rotation_length = document.getElementById("logrotate").value;
+        data.doorbell_ip = document.getElementById("doorbellip").value;
         fetch("/send_config", {
             method: "POST",
             headers: {

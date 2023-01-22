@@ -144,6 +144,8 @@ components:
           type: string
         log_rotation_length:
           type: integer
+        doorbell_ip:
+          type: string
     SoundFileList:
       type: array
       items: 
