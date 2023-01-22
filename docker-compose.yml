@@ -32,6 +32,7 @@ services:
       - doorbird-conf:/etc/serv/conf
       - doorbird-log:/etc/serv/log
       - doorbird-sounds:/etc/serv/sounds
+      - doorbird-images:/etc/serv/images
     restart: always
   control-front:
     depends_on:

@@ -67,4 +67,13 @@ def get_log():
             log_data.append(log_item)
     return Response(status = 200, response = json.dumps(log_data))
 
+@app.route('/motion_events', methods = ['GET'])
+def get_motion_events():
+    motion_path = Path(__file__).parent.parent / 'images' / 'motion'
+    try:
+        events = [item.name for item in motion_path.iterdir()]
+    except:
+        events = []
+    return Response(status = 200, response = json.dumps(events))
+
 app.run(host = '0.0.0.0', port = 80)
