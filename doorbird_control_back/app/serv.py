@@ -76,4 +76,19 @@ def get_motion_events():
         events = []
     return Response(status = 200, response = json.dumps(events))
 
+@app.route('/motion_events/<event_timestamp>', methods = ['GET'])
+def get_motion_event(event_timestamp: str):
+    motion_path = Path(__file__).parent.parent / 'images' / 'motion'
+    try:
+        events = [item.name for item in motion_path.iterdir()]
+    except:
+        events = []
+    if event_timestamp not in events:
+        return Response(status = 404)
+    imaage_paths = [item for item in (motion_path / event_timestamp).iterdir()]
+    # TODO Convert images to bytes.
+    images = []
+    return Response(status = 200, response = images)
+
+
 app.run(host = '0.0.0.0', port = 80)
