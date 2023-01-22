@@ -14,6 +14,8 @@ tags:
     description: View and change the sounds the chime will play.
   - name: Logging
     description: View logged events.
+  - name: Images
+    description: Browse captured images.
 paths:
   /test_broadcast:
     get:
@@ -118,6 +120,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LogList'
+  /motion_events:
+    get:
+      tags:
+        - Images
+      summary: List all motion events.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventList'
 
 components:
   schemas:
@@ -165,3 +179,7 @@ components:
         timestamp:
           type: string
           format: date-time
+    EventList:
+      type: array
+      items:
+        type: string
