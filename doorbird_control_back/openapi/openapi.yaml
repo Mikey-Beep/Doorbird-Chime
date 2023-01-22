@@ -132,6 +132,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/EventList'
+  /motion_events/{event_timestamp}:
+    get:
+      tags:
+        - Images
+      summary: Get images for a particular motion event.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageList'
+        '404':
+          description: Timestamp not found.
 
 components:
   schemas:
@@ -183,3 +197,7 @@ components:
       type: array
       items:
         type: string
+    ImageList:
+      type: array
+      items:
+        type: object
