@@ -44,11 +44,22 @@ services:
     networks:
       - doorbird-net
     restart: always
+  watcher:
+    depends_on:
+      - core
+    build: ./doorbird_watcher
+    networks:
+      - doorbird-net
+    volumes:
+      - doorbird-conf:/etc/serv/conf
+      - doorbird-images:/etc/serv/images
+    restart: always
 
 volumes:
   doorbird-conf: {}
   doorbird-log: {}
   doorbird-sounds: {}
+  doorbird-images: {}
 
 networks:
   doorbird-net: {}
