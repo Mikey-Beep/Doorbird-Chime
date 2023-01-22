@@ -51,3 +51,6 @@ if __name__ == '__main__':
         if config.user[:6] == decrypted_message.id and not decrypted_message.event.startswith('motion'):
             print('Matched user name and this is a button press!')
             send_chime_req(config.sleep_start, config.sleep_end, config.sound_file)
+        elif config.user[:6] == decrypted_message.id:
+            print('Matched user name and this is a motion event"')
+            requests.request('GET', 'http://watcher/motion')
