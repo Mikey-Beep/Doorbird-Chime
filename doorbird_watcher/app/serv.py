@@ -15,4 +15,8 @@ def motion():
     watcher_thread.start()
     return Response(status = 200)
 
+@app.route('/current', methods = ['GET'])
+def current():
+    return Response(status = 200, response = watcher.get_current_image(), mimetype = 'image/jpeg')
+
 app.run(host = '0.0.0.0', port = 80)

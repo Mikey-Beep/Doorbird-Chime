@@ -46,6 +46,8 @@ services:
       - doorbird-net
     restart: always
   watcher:
+    ports:
+      - 5007:80
     depends_on:
       - core
     build: ./doorbird_watcher
