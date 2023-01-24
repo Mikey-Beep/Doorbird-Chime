@@ -8,6 +8,16 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
+@app.route('/motion')
+def motion():
+    return render_template('motion.html')
+
+@app.route('/motion_events')
+def motion_events():
+    url = 'http://control-back/motion_events'
+    response = requests.get(url)
+    return Response(status = 200, response = json.dumps(response.json()))
+
 @app.route('/send_test')
 def send_test_packet():
     url = 'http://control-back/test_broadcast'
