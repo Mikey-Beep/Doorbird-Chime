@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Doorbird Control</title>
+        <meta charset="UTF-8"/>
+        <meta content="width=device-width, initial-scale=1"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    </head>
+    {% include 'header.html' %}
+    <body onload="populateEvents()">
+        <div class="content">
+            <div>
+                <label for="motionevents">Motion Events</label>
+                <select name="motionevents" id="motionevents" onchange="populateImages()"></select>
+            </div>
+            <div>
+                <div>
+                    <img id="image1" />
+                </div>
+                <div>
+                    <img id="image2" />
+                </div>
+                <div>
+                    <img id="image3" />
+                </div>
+                <div>
+                    <img id="image4" />
+                </div>
+                <div>
+                    <img id="image5" />
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
+<script>
+    async function populateEvents(){
+        await fetch("/motion_events")
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(jsonResponse) {
+                var select = document.getElementById("motionevents");
+                var i, L = select.options.length - 1;
+                for(i = L; i >= 0; i--) {
+                    select.remove(i);
+                }
+                for(var i = 0; i < jsonResponse.length; i++) {
+                    var opt = jsonResponse[i];
+                    var el = document.createElement("option");
+                    el.textContent = opt;
+                    el.value = opt;
+                    select.appendChild(el);
+                }
+            });
+        populateImages();
+    }
+
+    async function populateImages(){
+        await fetch(`/motion_events/${document.getElementById("motionevents").value}`)
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(jsonResponse) {
+                document.getElementById("image1").src = `/image/motion/${jsonResponse["images"][0]["event"]}/${jsonResponse["images"][0]["image"]}`
+                document.getElementById("image2").src = `/image/motion/${jsonResponse["images"][1]["event"]}/${jsonResponse["images"][1]["image"]}`
+                document.getElementById("image3").src = `/image/motion/${jsonResponse["images"][2]["event"]}/${jsonResponse["images"][2]["image"]}`
+                document.getElementById("image4").src = `/image/motion/${jsonResponse["images"][3]["event"]}/${jsonResponse["images"][3]["image"]}`
+                document.getElementById("image5").src = `/image/motion/${jsonResponse["images"][4]["event"]}/${jsonResponse["images"][4]["image"]}`
+            })
+    }
+
+</script>

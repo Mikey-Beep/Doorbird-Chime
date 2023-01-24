@@ -6,9 +6,7 @@
         <meta content="width=device-width, initial-scale=1"/>
         <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     </head>
-    <div class="header">
-        <h1>Doorbird Control</h1>
-    </div>
+    {% include 'header.html' %}
     <body onload="populateConfig()">
         <div class="content">
             <div>
@@ -41,6 +39,10 @@
                     <div>
                         <label for="logrotate">Log Rotation Length</label>
                         <input type="number" id="logrotate" name="logrotate"/>
+                    </div>
+                    <div>
+                        <label for="doorbellip">Doorbell IP Address</label>
+                        <input type="text" id="doorbellip" name="doorbellip"/>
                     </div>
                     <div>
                         <input type="submit" value="Submit">
@@ -101,6 +103,7 @@
                 document.getElementById("tpacket").value = jsonResponse.test_packet;
                 document.getElementById("sfile").value = jsonResponse.sound_file;
                 document.getElementById("logrotate").value = jsonResponse.log_rotation_length;
+                document.getElementById("doorbellip").value = jsonResponse.doorbell_ip
             });
     }
 
@@ -113,6 +116,7 @@
         data.test_packet = document.getElementById("tpacket").value;
         data.sound_file = document.getElementById("sfile").value;
         data.log_rotation_length = document.getElementById("logrotate").value;
+        data.doorbell_ip = document.getElementById("doorbellip").value;
         fetch("/send_config", {
             method: "POST",
             headers: {

@@ -10,6 +10,22 @@ body {
     color: white;
     font-size: 30px;
 }
+.navbar {
+    padding: 10px;
+    text-align: center;
+    background: #413C58;
+    color: white;
+    font-size: 15px;
+}
+.navbar a:link {
+    color: white;
+}
+.navbar a:visited{
+    color: white;
+}
+.navbar a:hover{
+    font-weight: bold;
+}
 .content {
     padding:20px;
 }

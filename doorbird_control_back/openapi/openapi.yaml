@@ -14,6 +14,8 @@ tags:
     description: View and change the sounds the chime will play.
   - name: Logging
     description: View logged events.
+  - name: Images
+    description: Browse captured images.
 paths:
   /test_broadcast:
     get:
@@ -118,6 +120,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LogList'
+  /motion_events:
+    get:
+      tags:
+        - Images
+      summary: List all motion events.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventList'
+  /motion_events/{event_timestamp}:
+    get:
+      tags:
+        - Images
+      summary: Get images for a particular motion event.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageList'
+        '404':
+          description: Timestamp not found.
 
 components:
   schemas:
@@ -144,6 +172,8 @@ components:
           type: string
         log_rotation_length:
           type: integer
+        doorbell_ip:
+          type: string
     SoundFileList:
       type: array
       items: 
@@ -163,3 +193,11 @@ components:
         timestamp:
           type: string
           format: date-time
+    EventList:
+      type: array
+      items:
+        type: string
+    ImageList:
+      type: array
+      items:
+        type: object

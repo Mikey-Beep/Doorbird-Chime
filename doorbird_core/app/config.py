@@ -12,6 +12,7 @@ class Config:
         self.sleep_end = time(0, 0)
         self.test_message = EncryptedMessage()
         self.log_rotation_length = 100
+        self.doorbell_ip = ''
 
     @classmethod
     def from_yaml(cls, conf_path: Path):
@@ -39,6 +40,9 @@ class Config:
         try:
             new_config.log_rotation_length = int(config['log_rotation_length'])
         except: pass
+        try:
+                new_config.doorbell_ip = config['doorbell_ip']
+        except: pass
         return new_config
     
     def to_yaml(self):
@@ -50,4 +54,5 @@ class Config:
         output['sleep_end'] = self.sleep_end.isoformat()
         output['test_packet'] = base64.b64encode(self.test_message.message_bytes).decode('ascii')
         output['log_rotation_length'] = self.log_rotation_length
+        output['doorbell_ip'] = self.doorbell_ip
         return yaml.dump(output)

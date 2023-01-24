@@ -30,6 +30,8 @@ if __name__ == '__main__':
     last_message = EncryptedMessage()
     config_path = Path(__file__).parent.parent / 'conf' / 'conf.yml'
     config = load_config(config_path)
+    with config_path.open('w') as config_file:
+        config_file.write(config.to_yaml())
     watcher = DoorbirdWatcher()
     logger = DoorbirdLogger()
     while 1:
@@ -49,3 +51,6 @@ if __name__ == '__main__':
         if config.user[:6] == decrypted_message.id and not decrypted_message.event.startswith('motion'):
             print('Matched user name and this is a button press!')
             send_chime_req(config.sleep_start, config.sleep_end, config.sound_file)
+        elif config.user[:6] == decrypted_message.id:
+            print('Matched user name and this is a motion event"')
+            requests.request('GET', 'http://watcher/motion')
