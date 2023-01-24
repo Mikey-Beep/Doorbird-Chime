@@ -86,7 +86,7 @@ def get_motion_event(event_timestamp: str):
     if event_timestamp not in events:
         return Response(status = 404)
     image_paths = [item for item in (motion_path / event_timestamp).iterdir()]
-    images = [{'event': event_timestamp, 'image': item.name} for item in image_paths]
+    images = sorted([{'event': event_timestamp, 'image': item.name} for item in image_paths], key = lambda x: x['image'])
     return Response(status = 200, response = json.dumps({'images': images}))
 
 @app.route('/image/<event_type>/<event_timestamp>/<image_name>', methods = ['GET'])
