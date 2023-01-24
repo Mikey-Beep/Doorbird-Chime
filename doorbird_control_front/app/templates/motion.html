@@ -6,9 +6,7 @@
         <meta content="width=device-width, initial-scale=1"/>
         <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     </head>
-    <div class="header">
-        <h1>Doorbird Control</h1>
-    </div>
+    {% include 'header.html' %}
     <body onload="populateEvents()">
         <div class="content">
             <div>
