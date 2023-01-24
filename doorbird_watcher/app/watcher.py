@@ -5,8 +5,9 @@ import requests, threading, time
 from requests.auth import HTTPDigestAuth
 
 class Watcher:
-    def __init__(self, config: Config):
+    def __init__(self, config: Config, image_spacing: int = 5):
         self.config = config
+        self.image_spacing = image_spacing
         self.images = [self.get_current_image()]
         self.watcher_thread = threading.Thread(target = self.watch, name = 'Watcher')
         self.watcher_thread.start()
@@ -18,7 +19,7 @@ class Watcher:
 
     def watch(self):
         while True:
-            time.sleep(5)
+            time.sleep(self.image_spacing)
             self.images.append(self.get_current_image())
             self.images = self.images[-3:]
     
@@ -26,9 +27,9 @@ class Watcher:
         # Grab the most recent 3 images from the watcher.
         images = self.images.copy()
         # Grab two more images.
-        time.sleep(5)
+        time.sleep(self.image_spacing)
         images.append(self.get_current_image())
-        time.sleep(5)
+        time.sleep(self.image_spacing)
         images.append(self.get_current_image())
         # Build a directory to store the files for this event.
         image_dir = Path(__file__).parent.parent / 'images' / event_name / str(datetime.utcnow())
