@@ -1,9 +1,10 @@
-import json, base64
+import io, json, base64
 from pathlib import Path
 from flask import Flask, request, Response
 from test_broadcast import TestBroadcaster
 from config import Config
 from sounds import SoundManager
+from PIL import Image
 
 app = Flask(__name__)
 config_path = Path(__file__).parent.parent / 'conf' / 'conf.yml'
@@ -71,7 +72,7 @@ def get_log():
 def get_motion_events():
     motion_path = Path(__file__).parent.parent / 'images' / 'motion'
     try:
-        events = [item.name for item in motion_path.iterdir()]
+        events = sorted([item.name for item in motion_path.iterdir()], reverse = True)
     except:
         events = []
     return Response(status = 200, response = json.dumps(events))
@@ -85,10 +86,15 @@ def get_motion_event(event_timestamp: str):
         events = []
     if event_timestamp not in events:
         return Response(status = 404)
-    imaage_paths = [item for item in (motion_path / event_timestamp).iterdir()]
-    # TODO Convert images to bytes.
-    images = []
-    return Response(status = 200, response = images)
+    image_paths = [item for item in (motion_path / event_timestamp).iterdir()]
+    images = [get_response_image(image_path) for image_path in image_paths]
+    return Response(status = 200, response = json.dumps({'images': images}))
 
+def get_response_image(image_path):
+    pil_img = Image.open(image_path, mode = 'r')
+    byte_arr = io.BytesIO()
+    pil_img.save(byte_arr, format = 'jpeg')
+    encoded_img = base64.encodebytes(byte_arr.getvalue()).decode('ascii')
+    return encoded_img
 
 app.run(host = '0.0.0.0', port = 80)
