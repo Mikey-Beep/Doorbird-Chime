@@ -13,7 +13,24 @@
         <div class="content">
             <div>
                 <label for="motionevents">Motion Events</label>
-                <select name="motionevents" id="motionevents"></select>
+                <select name="motionevents" id="motionevents" onchange="populateImages()"></select>
+            </div>
+            <div>
+                <div>
+                    <img id="image1" />
+                </div>
+                <div>
+                    <img id="image2" />
+                </div>
+                <div>
+                    <img id="image3" />
+                </div>
+                <div>
+                    <img id="image4" />
+                </div>
+                <div>
+                    <img id="image5" />
+                </div>
             </div>
         </div>
     </body>
@@ -39,5 +56,21 @@
                     select.appendChild(el);
                 }
             });
+        populateImages();
     }
+
+    async function populateImages(){
+        await fetch(`/motion_events/${document.getElementById("motionevents").value}`)
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(jsonResponse) {
+                document.getElementById("image1").src = `/image/motion/${jsonResponse["images"][0]["event"]}/${jsonResponse["images"][0]["image"]}`
+                document.getElementById("image2").src = `/image/motion/${jsonResponse["images"][1]["event"]}/${jsonResponse["images"][1]["image"]}`
+                document.getElementById("image3").src = `/image/motion/${jsonResponse["images"][2]["event"]}/${jsonResponse["images"][2]["image"]}`
+                document.getElementById("image4").src = `/image/motion/${jsonResponse["images"][3]["event"]}/${jsonResponse["images"][3]["image"]}`
+                document.getElementById("image5").src = `/image/motion/${jsonResponse["images"][4]["event"]}/${jsonResponse["images"][4]["image"]}`
+            })
+    }
+
 </script>
