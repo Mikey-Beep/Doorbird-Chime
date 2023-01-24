@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-from flask import Flask, render_template, Response, request
-import requests, json
+from flask import Flask, render_template, Response, request, send_file
+import requests, json, io
 
 app = Flask(__name__)
 
@@ -57,5 +57,11 @@ def get_sounds():
     url = 'http://control-back/sound_files'
     resp = requests.request("GET", url, data='')
     return Response(status = 200, response = json.dumps(resp.json()))
+
+@app.route('/image/<event_type>/<event_timestamp>/<image_name>', methods = ['GET'])
+def get_image(event_type: str, event_timestamp: str, image_name: str):
+    url = f'http://control-back/image/{event_type}/{event_timestamp}/{image_name}'
+    resp = requests.request("GET", url, data='')
+    return send_file(io.BytesIO(resp.content), mimetype = 'image/jpeg')
 
 app.run(host='0.0.0.0', port = 80)
