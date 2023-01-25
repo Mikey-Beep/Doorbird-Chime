@@ -67,18 +67,18 @@ def get_log():
             log_data.append(log_item)
     return Response(status = 200, response = json.dumps(log_data))
 
-@app.route('/motion_events', methods = ['GET'])
-def get_motion_events():
-    motion_path = Path(__file__).parent.parent / 'images' / 'motion'
+@app.route('/events/<event_type>', methods = ['GET'])
+def get_motion_events(event_type: str):
+    motion_path = Path(__file__).parent.parent / 'images' / event_type
     try:
         events = sorted([item.name for item in motion_path.iterdir()], reverse = True)
     except:
         events = []
     return Response(status = 200, response = json.dumps(events))
 
-@app.route('/motion_events/<event_timestamp>', methods = ['GET'])
-def get_motion_event(event_timestamp: str):
-    motion_path = Path(__file__).parent.parent / 'images' / 'motion'
+@app.route('/events/<event_type>/<event_timestamp>', methods = ['GET'])
+def get_motion_event(event_type: str, event_timestamp: str):
+    motion_path = Path(__file__).parent.parent / 'images' / event_type
     try:
         events = [item.name for item in motion_path.iterdir()]
     except:
