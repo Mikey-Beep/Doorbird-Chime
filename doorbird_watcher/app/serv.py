@@ -11,11 +11,16 @@ watcher = Watcher(config)
 
 @app.route('/motion', methods = ['GET'])
 def motion():
-    watcher_thread = threading.Thread(target = watcher.save_event_set, name = 'Watcher', args = ('motion',))
+    watcher_thread = threading.Thread(target = watcher.save_event_set, name = 'Watcher-Motion', args = ('motion',))
     watcher_thread.start()
     return Response(status = 200)
 
-@app.route('/current', methods = ['GET'])
+@app.route('/ring', methods = ['GET'])
+def ring():
+    watcher_thread = threading.Thread(target = watcher.save_event_set, name = 'Watcher-Ring', args = ('ring'))
+    watcher_thread.start()
+    return Response(status = 200)
+
 def current():
     return Response(status = 200, response = watcher.get_current_image(), mimetype = 'image/jpeg')
 

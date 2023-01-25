@@ -10,8 +10,8 @@
     <body onload="populateEvents()">
         <div class="content">
             <div>
-                <label for="motionevents">Motion Events</label>
-                <select name="motionevents" id="motionevents" onchange="populateImages()"></select>
+                <label for="ringevents">Ring Events</label>
+                <select name="ringevents" id="ringevents" onchange="populateImages()"></select>
             </div>
             <div>
                 <div>
@@ -36,12 +36,12 @@
 
 <script>
     async function populateEvents(){
-        await fetch("/events/motion")
+        await fetch("/events/ring")
             .then(function(response) {
                 return response.json();
             })
             .then(function(jsonResponse) {
-                var select = document.getElementById("motionevents");
+                var select = document.getElementById("ringevents");
                 var i, L = select.options.length - 1;
                 for(i = L; i >= 0; i--) {
                     select.remove(i);
@@ -58,16 +58,16 @@
     }
 
     async function populateImages(){
-        await fetch(`/events/motion/${document.getElementById("motionevents").value}`)
+        await fetch(`/events/ring/${document.getElementById("ringevents").value}`)
             .then(function(response) {
                 return response.json();
             })
             .then(function(jsonResponse) {
-                document.getElementById("image1").src = `/image/motion/${jsonResponse["images"][0]["event"]}/${jsonResponse["images"][0]["image"]}`
-                document.getElementById("image2").src = `/image/motion/${jsonResponse["images"][1]["event"]}/${jsonResponse["images"][1]["image"]}`
-                document.getElementById("image3").src = `/image/motion/${jsonResponse["images"][2]["event"]}/${jsonResponse["images"][2]["image"]}`
-                document.getElementById("image4").src = `/image/motion/${jsonResponse["images"][3]["event"]}/${jsonResponse["images"][3]["image"]}`
-                document.getElementById("image5").src = `/image/motion/${jsonResponse["images"][4]["event"]}/${jsonResponse["images"][4]["image"]}`
+                document.getElementById("image1").src = `/image/ring/${jsonResponse["images"][0]["event"]}/${jsonResponse["images"][0]["image"]}`
+                document.getElementById("image2").src = `/image/ring/${jsonResponse["images"][1]["event"]}/${jsonResponse["images"][1]["image"]}`
+                document.getElementById("image3").src = `/image/ring/${jsonResponse["images"][2]["event"]}/${jsonResponse["images"][2]["image"]}`
+                document.getElementById("image4").src = `/image/ring/${jsonResponse["images"][3]["event"]}/${jsonResponse["images"][3]["image"]}`
+                document.getElementById("image5").src = `/image/ring/${jsonResponse["images"][4]["event"]}/${jsonResponse["images"][4]["image"]}`
             })
     }
 

@@ -12,15 +12,19 @@ def index():
 def motion():
     return render_template('motion.html')
 
-@app.route('/motion_events', methods = ['GET'])
-def motion_events():
-    url = 'http://control-back/motion_events'
+@app.route('/ring')
+def ring():
+    return render_template('ring.html')
+
+@app.route('/events/<event_type>', methods = ['GET'])
+def motion_events(event_type: str):
+    url = f'http://control-back/events/{event_type}'
     response = requests.get(url)
     return Response(status = 200, response = json.dumps(response.json()))
 
-@app.route('/motion_events/<event_timestamp>', methods = ['GET'])
-def motion_event(event_timestamp: str):
-    url = f'http://control-back/motion_events/{event_timestamp}'
+@app.route('/events/<event_type>/<event_timestamp>', methods = ['GET'])
+def motion_event(event_type: str, event_timestamp: str):
+    url = f'http://control-back/events/{event_type}/{event_timestamp}'
     response = requests.get(url)
     return Response(status = 200, response = json.dumps(response.json()))
 
