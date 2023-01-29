@@ -29,12 +29,6 @@ body {
 .content {
     padding:20px;
 }
-.table {
-    background: #BFD7B5;
-}
-.tableheader {
-    background: #8B80F9;
-}
 input[type=text], input[type=password], input[type=number], select {
     width: 100%;
     padding: 12px 20px;
@@ -85,4 +79,13 @@ button:hover {
 }
 .custom-file-upload:hover {
     background-color: #45a049;
+}
+.logtable, .logtable tr, .logtable td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
+}
+.logtable th {
+    border: 2px solid black;
+    border-collapse: collapse;
 }

@@ -46,7 +46,7 @@ if __name__ == '__main__':
             print('Failed to decrypt message, skipping it.')
             continue
         if encrypted_message != EncryptedMessage(config.test_message):
-            logger.log(decrypted_message, config.log_rotation_length)
+            logger.log(encrypted_message, decrypted_message, config.log_rotation_length)
         if config.user[:6] == decrypted_message.id and not decrypted_message.event.startswith('motion'):
             print('Matched user name and this is a button press!')
             requests.get('http://watcher/ring')

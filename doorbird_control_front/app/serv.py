@@ -16,6 +16,10 @@ def motion():
 def ring():
     return render_template('ring.html')
 
+@app.route('/logs')
+def logs():
+    return render_template('logs.html')
+
 @app.route('/events/<event_type>', methods = ['GET'])
 def motion_events(event_type: str):
     url = f'http://control-back/events/{event_type}'
@@ -67,5 +71,11 @@ def get_image(event_type: str, event_timestamp: str, image_name: str):
     url = f'http://control-back/image/{event_type}/{event_timestamp}/{image_name}'
     resp = requests.request("GET", url, data='')
     return send_file(io.BytesIO(resp.content), mimetype = 'image/jpeg')
+
+@app.route('/get_logs')
+def get_logs():
+    url = 'http://control-back/log'
+    resp = requests.get(url)
+    return Response(status = 200, response = json.dumps(resp.json()))
 
 app.run(host='0.0.0.0', port = 80)

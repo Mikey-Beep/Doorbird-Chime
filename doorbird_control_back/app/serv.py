@@ -59,12 +59,16 @@ def get_log():
     with log_path.open() as log_file:
         for line in log_file:
             line = line.strip().split('\u16bc')
+            while len(line) < 4:
+                line.append('')
             log_item = {
                 'user': line[0],
                 'event': line[1],
-                'timestamp': line[2]
+                'timestamp': line[2],
+                'message': line[3]
             }
             log_data.append(log_item)
+    log_data = log_data[::-1]
     return Response(status = 200, response = json.dumps(log_data))
 
 @app.route('/events/<event_type>', methods = ['GET'])
