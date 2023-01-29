@@ -5,5 +5,6 @@ RUN apk add --no-cache --virtual .pynacl_deps build-base python3-dev libffi-dev 
     pip install -r requirements.txt && \
     apk del .pynacl_deps
 COPY ./doorbird_core /etc/core
+COPY ./doorbird_common /etc/core/app/common
 WORKDIR /etc/core
 CMD ["python3", "-u", "app/app.py"]

@@ -1,7 +1,6 @@
 import yaml, base64
 from datetime import time
 from pathlib import Path
-from encrypted_message import EncryptedMessage
 
 class Config:
     def __init__(self):
@@ -10,7 +9,7 @@ class Config:
         self.sound_file = 'chime.wav'
         self.sleep_start = time(0, 0)
         self.sleep_end = time(0, 0)
-        self.test_message = EncryptedMessage()
+        self.test_message = b''
         self.log_rotation_length = 100
         self.doorbell_ip = ''
 
@@ -35,7 +34,7 @@ class Config:
             new_config.sleep_end = time.fromisoformat(config['sleep_end'])
         except: pass
         try:
-            new_config.test_message = EncryptedMessage(base64.b64decode(config['test_packet'].encode('ascii')))
+            new_config.test_message = base64.b64decode(config['test_packet'].encode('ascii'))
         except: pass
         try:
             new_config.log_rotation_length = int(config['log_rotation_length'])
@@ -52,7 +51,7 @@ class Config:
         output['sound_file'] = self.sound_file
         output['sleep_start'] = self.sleep_start.isoformat()
         output['sleep_end'] = self.sleep_end.isoformat()
-        output['test_packet'] = base64.b64encode(self.test_message.message_bytes).decode('ascii')
+        output['test_packet'] = base64.b64encode(self.test_message).decode('ascii')
         output['log_rotation_length'] = self.log_rotation_length
         output['doorbell_ip'] = self.doorbell_ip
         return yaml.dump(output)

@@ -1,8 +1,7 @@
 from encrypted_message import EncryptedMessage
-from decrypted_message import DecryptedMessage
 from doorbird_watcher import DoorbirdWatcher
 from logger import DoorbirdLogger
-from config import Config
+from common.config.config import Config
 from pathlib import Path
 from datetime import *
 import requests
@@ -37,7 +36,7 @@ if __name__ == '__main__':
     while 1:
         encrypted_message = watcher.watch()
         config = load_config(config_path)
-        if encrypted_message == last_message and encrypted_message != config.test_message:
+        if encrypted_message == last_message and encrypted_message != EncryptedMessage(config.test_message):
             print('Received a duplicate message, skipping it.')
             continue
         last_message = encrypted_message
@@ -46,7 +45,7 @@ if __name__ == '__main__':
         except:
             print('Failed to decrypt message, skipping it.')
             continue
-        if encrypted_message != config.test_message:
+        if encrypted_message != EncryptedMessage(config.test_message):
             logger.log(decrypted_message, config.log_rotation_length)
         if config.user[:6] == decrypted_message.id and not decrypted_message.event.startswith('motion'):
             print('Matched user name and this is a button press!')
