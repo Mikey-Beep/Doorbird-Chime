@@ -19,7 +19,7 @@ def load_config(config_path: Path):
     return config
 
 def send_chime_req(sleep_start_time: time, sleep_end_time: time, sound_file: str):
-    if datetime.now().time() > sleep_start_time or datetime.now().time() < sleep_end_time:
+    if sleep_start_time != sleep_end_time and (datetime.now().time() > sleep_start_time or datetime.now().time() < sleep_end_time):
             print('Inside sleep time, not making a sound.')
             return
     url = 'http://chime/chime'
