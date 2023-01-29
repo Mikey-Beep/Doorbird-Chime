@@ -2,7 +2,7 @@ import json, base64
 from pathlib import Path
 from flask import Flask, request, Response, send_file
 from test_broadcast import TestBroadcaster
-from config import Config
+from common.config.config import Config
 from sounds import SoundManager
 
 app = Flask(__name__)
@@ -20,13 +20,13 @@ def serv_api():
 @app.route('/test_broadcast', methods = ['GET'])
 def test_broadcast():
     broadcaster = TestBroadcaster()
-    broadcaster.broadcast(base64.b64decode(config.test_packet.encode('ascii')))
+    broadcaster.broadcast(config.test_message)
     return Response(status = 200)
 
 @app.route('/config', methods = ['GET', 'POST'])
 def write_config():
     if request.method == 'GET':
-        return Response(status = 200, response = json.dumps(config.__dict__))
+        return Response(status = 200, response = json.dumps(config.to_dict()))
     elif request.method == 'POST':
         config.update(request.json)
         with config_path.open('w') as config_file:

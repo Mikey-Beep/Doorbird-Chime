@@ -14,37 +14,17 @@ class Config:
         self.doorbell_ip = ''
 
     @classmethod
-    def from_yaml(cls, conf_path: Path):
-        with conf_path.open() as conf_file:
-            config = yaml.safe_load(conf_file)
+    def from_yaml(cls, config_path: Path):
+        with config_path.open() as config_file:
+            config = yaml.safe_load(config_file)
         new_config = Config()
-        try:
-            new_config.password = config['password']
-        except: pass
-        try:
-            new_config.user = config['user']
-        except: pass
-        try:
-            new_config.sound_file = config['sound_file']
-        except: pass
-        try:
-            new_config.sleep_start =  time.fromisoformat(config['sleep_start'])
-        except: pass
-        try:
-            new_config.sleep_end = time.fromisoformat(config['sleep_end'])
-        except: pass
-        try:
-            new_config.test_message = base64.b64decode(config['test_packet'].encode('ascii'))
-        except: pass
-        try:
-            new_config.log_rotation_length = int(config['log_rotation_length'])
-        except: pass
-        try:
-                new_config.doorbell_ip = config['doorbell_ip']
-        except: pass
+        new_config.update(config)
         return new_config
     
     def to_yaml(self):
+        return yaml.dump(self.to_dict())
+
+    def to_dict(self):
         output = {}
         output['password'] = self.password
         output['user'] = self.user
@@ -54,4 +34,30 @@ class Config:
         output['test_packet'] = base64.b64encode(self.test_message).decode('ascii')
         output['log_rotation_length'] = self.log_rotation_length
         output['doorbell_ip'] = self.doorbell_ip
-        return yaml.dump(output)
+        return output
+
+    def update(self, config: dict):
+        try:
+            self.password = config['password']
+        except: pass
+        try:
+            self.user = config['user']
+        except: pass
+        try:
+            self.sound_file = config['sound_file']
+        except: pass
+        try:
+            self.sleep_start =  time.fromisoformat(config['sleep_start'])
+        except: pass
+        try:
+            self.sleep_end = time.fromisoformat(config['sleep_end'])
+        except: pass
+        try:
+            self.test_message = base64.b64decode(config['test_packet'].encode('ascii'))
+        except: pass
+        try:
+            self.log_rotation_length = int(config['log_rotation_length'])
+        except: pass
+        try:
+            self.doorbell_ip = config['doorbell_ip']
+        except: pass
