@@ -1,6 +1,8 @@
 services:
   core:
-    build: ./doorbird_core
+    build: 
+      context: ./
+      dockerfile: ./doorbird_core/dockerfile
     networks:
       - doorbird-net
     ports:
@@ -10,7 +12,9 @@ services:
       - doorbird-log:/etc/core/log
     restart: always
   chime:
-    build: ./doorbird_chime
+    build: 
+      context: ./
+      dockerfile: ./doorbird_chime/dockerfile
     depends_on:
       - core
     networks:
@@ -21,7 +25,9 @@ services:
       - '/dev/snd:/dev/snd'
     restart: always
   control-back:
-    build: ./doorbird_control_back
+    build: 
+      context: ./
+      dockerfile: ./doorbird_control_back/dockerfile
     depends_on:
       - core
     networks:
@@ -36,7 +42,9 @@ services:
     depends_on:
       - core
       - control-back
-    build: ./doorbird_control_front
+    build: 
+      context: ./
+      dockerfile: ./doorbird_control_front/dockerfile
     ports:
       - '5005:80'
       - '5006:443'
@@ -46,7 +54,9 @@ services:
   watcher:
     depends_on:
       - core
-    build: ./doorbird_watcher
+    build: 
+      context: ./
+      dockerfile: ./doorbird_watcher/dockerfile
     networks:
       - doorbird-net
     volumes:

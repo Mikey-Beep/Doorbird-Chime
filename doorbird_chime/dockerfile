@@ -1,7 +1,7 @@
 FROM alpine:latest
-COPY requirements.txt requirements.txt
+COPY ./doorbird_chime/requirements.txt requirements.txt
 RUN apk add --no-cache python3 py-pip alsa-utils && \
     pip install -r requirements.txt
-COPY . /etc/chime
+COPY ./doorbird_chime /etc/chime
 WORKDIR /etc/chime
 CMD ["python3", "-u", "app/serv.py"]

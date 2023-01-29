@@ -1,20 +1,22 @@
-from config import Config
 from pathlib import Path
 from datetime import datetime
-import requests, threading, time
+import requests, threading, time, urllib3
 from requests.auth import HTTPDigestAuth
 
+urllib3.disable_warnings()
+
 class Watcher:
-    def __init__(self, config: Config, image_spacing: int = 5):
-        self.config = config
+    def __init__(self, doorbell_ip: str, user: str, password: str, image_spacing: int = 5):
+        self.doorbell_ip = doorbell_ip
+        self.user = user
+        self.password = password
         self.image_spacing = image_spacing
         self.images = [self.get_current_image()]
         self.watcher_thread = threading.Thread(target = self.watch, name = 'Watcher')
         self.watcher_thread.start()
 
     def get_current_image(self):
-            response = requests.get(f'https://{self.config.doorbell_ip}/bha-api/image.cgi', auth = HTTPDigestAuth(self.config.user, self.config.password), verify = False)
-            print('Image retrieved from doorbell.')
+            response = requests.get(f'https://{self.doorbell_ip}/bha-api/image.cgi', auth = HTTPDigestAuth(self.user, self.password), verify = False)
             return response.content
 
     def watch(self):
@@ -26,6 +28,7 @@ class Watcher:
     def save_event_set(self, event_name: str):
         # Grab the most recent 3 images from the watcher.
         images = self.images.copy()
+        print('Storing images.')
         # Grab two more images.
         time.sleep(self.image_spacing)
         images.append(self.get_current_image())
@@ -39,3 +42,4 @@ class Watcher:
             image_path = image_dir / f'{i}.jpg'
             with image_path.open('wb') as image_file:
                 image_file.write(images[i])
+        print(f'Images stored in {image_dir}.')
