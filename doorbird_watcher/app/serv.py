@@ -17,7 +17,7 @@ def motion():
 
 @app.route('/ring', methods = ['GET'])
 def ring():
-    watcher_thread = threading.Thread(target = watcher.save_event_set, name = 'Watcher-Ring', args = ('ring'))
+    watcher_thread = threading.Thread(target = watcher.save_event_set, name = 'Watcher-Ring', args = ('ring',))
     watcher_thread.start()
     return Response(status = 200)
 
