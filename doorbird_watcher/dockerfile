@@ -3,5 +3,6 @@ COPY ./doorbird_watcher/requirements.txt requirements.txt
 RUN apk add --no-cache python3 py-pip && \
     pip install -r requirements.txt
 COPY ./doorbird_watcher /etc/serv
+COPY ./doorbird_common /etc/serv/app/common
 WORKDIR /etc/serv
 CMD ["python3", "-u", "app/serv.py"]

@@ -1,13 +1,13 @@
 from pathlib import Path
 from flask import Flask, request, Response
-from config import Config
+from common.config.config import Config
 from watcher import Watcher
 import threading
 
 app = Flask(__name__)
 config_path = Path(__file__).parent.parent / 'conf' / 'conf.yml'
 config = Config.from_yaml(config_path)
-watcher = Watcher(config)
+watcher = Watcher(config.doorbell_ip, config.user, config.password)
 
 @app.route('/motion', methods = ['GET'])
 def motion():

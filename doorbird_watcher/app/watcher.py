@@ -1,22 +1,22 @@
-from config import Config
 from pathlib import Path
 from datetime import datetime
-import requests, threading, time
+import requests, threading, time, urllib3
 from requests.auth import HTTPDigestAuth
-import urllib3
 
 urllib3.disable_warnings()
 
 class Watcher:
-    def __init__(self, config: Config, image_spacing: int = 5):
-        self.config = config
+    def __init__(self, doorbell_ip: str, user: str, password: str, image_spacing: int = 5):
+        self.doorbell_ip = doorbell_ip
+        self.user = user
+        self.password = password
         self.image_spacing = image_spacing
         self.images = [self.get_current_image()]
         self.watcher_thread = threading.Thread(target = self.watch, name = 'Watcher')
         self.watcher_thread.start()
 
     def get_current_image(self):
-            response = requests.get(f'https://{self.config.doorbell_ip}/bha-api/image.cgi', auth = HTTPDigestAuth(self.config.user, self.config.password), verify = False)
+            response = requests.get(f'https://{self.doorbell_ip}/bha-api/image.cgi', auth = HTTPDigestAuth(self.user, self.password), verify = False)
             return response.content
 
     def watch(self):
