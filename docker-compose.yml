@@ -46,8 +46,8 @@ services:
       context: ./
       dockerfile: ./doorbird_control_front/dockerfile
     ports:
-      - '5005:80'
-      - '5006:443'
+      - '${front_http_port}:80'
+      - '${front_https_port}:443'
     networks:
       - doorbird-net
     restart: always
