@@ -7,7 +7,7 @@ from sounds import SoundManager
 
 app = Flask(__name__)
 config_path = Path(__file__).parent.parent / 'conf' / 'conf.yml'
-config = Config.from_yaml(config_path)
+conf = Config.from_yaml(config_path)
 sound_manager = SoundManager()
 
 @app.route('/api/docs', methods = ['GET'])
@@ -20,17 +20,17 @@ def serv_api():
 @app.route('/test_broadcast', methods = ['GET'])
 def test_broadcast():
     broadcaster = TestBroadcaster()
-    broadcaster.broadcast(config.test_message)
+    broadcaster.broadcast(conf.test_message)
     return Response(status = 200)
 
 @app.route('/config', methods = ['GET', 'POST'])
-def write_config():
+def config():
     if request.method == 'GET':
-        return Response(status = 200, response = json.dumps(config.to_dict()))
+        return Response(status = 200, response = json.dumps(conf.to_dict()))
     elif request.method == 'POST':
-        config.update(request.json)
+        conf.update(request.json)
         with config_path.open('w') as config_file:
-            config_file.write(config.to_yaml())
+            config_file.write(conf.to_yaml())
         return Response(status = 200)
 
 @app.route('/sound_files', methods = ['GET'])
