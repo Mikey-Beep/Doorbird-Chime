@@ -20,6 +20,10 @@ def ring():
 def logs():
     return render_template('logs.html')
 
+@app.route('/current', methods = ['GET'])
+def current():
+    return render_template('current.html')
+
 @app.route('/events/<event_type>', methods = ['GET'])
 def motion_events(event_type: str):
     url = f'http://control-back/events/{event_type}'
@@ -77,5 +81,11 @@ def get_logs():
     url = 'http://control-back/log'
     resp = requests.get(url)
     return Response(status = 200, response = json.dumps(resp.json()))
+
+@app.route('/current_image', methods = ['GET'])
+def get_current_image():
+    url = 'http://control-back/current_image'
+    resp = requests.get(url)
+    return send_file(io.BytesIO(resp.content), mimetype = 'image/jpeg')
 
 app.run(host='0.0.0.0', port = 80)

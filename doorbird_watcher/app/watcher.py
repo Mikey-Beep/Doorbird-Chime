@@ -16,24 +16,24 @@ class Watcher:
         self.watcher_thread = threading.Thread(target = self.watch, name = 'Watcher')
         self.watcher_thread.start()
 
-    def get_current_image(self):
+    def get_current_image(self) -> bytes:
             response = requests.get(f'https://{self.doorbell_ip}/bha-api/image.cgi', auth = HTTPDigestAuth(self.user, self.password), verify = False)
             return response.content
 
-    def watch(self):
+    def watch(self) -> None:
         while True:
             time.sleep(self.image_spacing)
             self.images.append(self.get_current_image())
             self.images = self.images[-3:]
     
-    def drop_old_images(self, event_name: str):
+    def drop_old_images(self, event_name: str) -> None:
         event_dir = Path(__file__).parent.parent / 'images' / event_name
         events = sorted([event for event in event_dir.iterdir()], key = lambda x: x.name)
         if len(events) > self.event_retention_count:
             for i in range(len(events) - self.event_retention_count):
                 shutil.rmtree(events[i])
 
-    def save_event_set(self, event_name: str):
+    def save_event_set(self, event_name: str) -> None:
         # Grab the most recent 3 images from the watcher.
         images = self.images.copy()
         print('Storing images.')
