@@ -1,7 +1,9 @@
 FROM alpine:latest
 COPY ./doorbird_control_back/requirements.txt requirements.txt
-RUN apk add --no-cache python3 py-pip && \
-    pip install -r requirements.txt
+RUN apk add --virtual .build-deps gcc python3-dev musl-dev && \
+    apk add --no-cache python3 py-pip jpeg-dev zlib-dev libjpeg && \
+    pip install -r requirements.txt && \
+    apk del .build-deps
 COPY ./doorbird_control_back /etc/serv
 COPY ./doorbird_common /etc/serv/app/common
 WORKDIR /etc/serv
