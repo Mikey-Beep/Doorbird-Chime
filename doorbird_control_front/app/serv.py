@@ -1,22 +1,21 @@
-#!/usr/bin/env python3
 from flask import Flask, render_template, Response, request, send_file
 import requests, json, io
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/', methods = ['GET'])
 def index():
     return render_template('index.html')
 
-@app.route('/motion')
+@app.route('/motion', methods = ['GET'])
 def motion():
     return render_template('motion.html')
 
-@app.route('/ring')
+@app.route('/ring', methods = ['GET'])
 def ring():
     return render_template('ring.html')
 
-@app.route('/logs')
+@app.route('/logs', methods = ['GET'])
 def logs():
     return render_template('logs.html')
 
@@ -36,47 +35,45 @@ def motion_event(event_type: str, event_timestamp: str):
     response = requests.get(url)
     return Response(status = 200, response = json.dumps(response.json()))
 
-@app.route('/send_test')
+@app.route('/send_test', methods = ['GET'])
 def send_test_packet():
     url = 'http://control-back/test_broadcast'
-    response = requests.request("GET", url, data='')
-    print(response.text)
+    response = requests.get(url)
     return render_template('index.html')
 
-@app.route('/get_config')
+@app.route('/get_config', methods = ['GET'])
 def get_config():
     url = 'http://control-back/config'
-    resp = requests.request("GET", url, data='')
+    resp = requests.get(url)
     return Response(status = 200, response = json.dumps(resp.json()))
 
 @app.route('/send_config', methods = ['POST'])
 def send_config():
     url = 'http://control-back/config'
-    requests.request("POST", url, json=request.json)
+    requests.post(url, json = request.json)
     return Response(status = 200)
 
 @app.route('/send_sound', methods = ['POST'])
 def send_sound():
-    requests.request(
-        method='POST',
+    requests.post(
         url='http://control-back/sound_file',
         files={k: (v.filename, v.stream, v.content_type, v.headers) for k, v in request.files.items()}
     )
     return Response(status = 200)
 
-@app.route('/get_sounds')
+@app.route('/get_sounds', methods = ['GET'])
 def get_sounds():
     url = 'http://control-back/sound_files'
-    resp = requests.request("GET", url, data='')
+    resp = requests.get(url)
     return Response(status = 200, response = json.dumps(resp.json()))
 
 @app.route('/image/<event_type>/<event_timestamp>/<image_name>', methods = ['GET'])
 def get_image(event_type: str, event_timestamp: str, image_name: str):
     url = f'http://control-back/image/{event_type}/{event_timestamp}/{image_name}'
-    resp = requests.request("GET", url, data='')
+    resp = requests.get(url)
     return send_file(io.BytesIO(resp.content), mimetype = 'image/jpeg')
 
-@app.route('/get_logs')
+@app.route('/get_logs', methods = ['GET'])
 def get_logs():
     url = 'http://control-back/log'
     resp = requests.get(url)

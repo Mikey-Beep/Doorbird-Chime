@@ -1,4 +1,5 @@
-import yaml, base64
+from __future__ import annotations
+import base64, yaml
 from datetime import time
 from pathlib import Path
 
@@ -15,17 +16,17 @@ class Config:
         self.event_retention_count = 100
 
     @classmethod
-    def from_yaml(cls, config_path: Path):
+    def from_yaml(cls, config_path: Path) -> Config:
         with config_path.open() as config_file:
             config = yaml.safe_load(config_file)
         new_config = Config()
         new_config.update(config)
         return new_config
     
-    def to_yaml(self):
+    def to_yaml(self) -> str:
         return yaml.dump(self.to_dict())
 
-    def to_dict(self):
+    def to_dict(self) -> dict[str, any]:
         output = {}
         output['password'] = self.password
         output['user'] = self.user
@@ -38,7 +39,7 @@ class Config:
         output['event_retention_count'] = self.event_retention_count
         return output
 
-    def update(self, config: dict):
+    def update(self, config: dict[str, any]) -> None:
         try:
             self.password = config['password']
         except: pass
