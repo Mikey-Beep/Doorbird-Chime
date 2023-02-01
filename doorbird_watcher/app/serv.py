@@ -1,8 +1,8 @@
 from pathlib import Path
-from flask import Flask, request, Response
+from flask import Flask, Response, send_file
 from common.config.config import Config
 from watcher import Watcher
-import threading
+import io, threading
 
 app = Flask(__name__)
 config_path = Path(__file__).parent.parent / 'conf' / 'conf.yml'
@@ -21,7 +21,8 @@ def ring():
     watcher_thread.start()
     return Response(status = 200)
 
+@app.route('/current_image', methods = ['GET'])
 def current():
-    return Response(status = 200, response = watcher.get_current_image(), mimetype = 'image/jpeg')
+    return send_file(io.BytesIO(watcher.get_current_image()), mimetype = 'image/jpeg')
 
 app.run(host = '0.0.0.0', port = 80)
