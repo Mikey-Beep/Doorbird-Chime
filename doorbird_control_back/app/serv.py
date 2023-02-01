@@ -1,4 +1,4 @@
-import json, base64
+import io, json, requests
 from pathlib import Path
 from flask import Flask, request, Response, send_file
 from test_broadcast import TestBroadcaster
@@ -97,5 +97,11 @@ def get_motion_event(event_type: str, event_timestamp: str):
 def get_image(event_type: str, event_timestamp: str, image_name: str):
     image_path = Path(__file__).parent.parent / 'images' / event_type / event_timestamp / image_name
     return send_file(image_path, mimetype = 'image/jpeg')
+
+@app.route('/current_image', methods = ['GET'])
+def get_current_image():
+    url = 'http://watcher/current_image'
+    resp = requests.get(url)
+    return send_file(io.BytesIO(resp.content), mimetype = 'image/jpeg')
 
 app.run(host = '0.0.0.0', port = 80)
