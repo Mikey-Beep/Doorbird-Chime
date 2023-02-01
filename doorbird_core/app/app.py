@@ -18,12 +18,12 @@ def load_config(config_path: Path):
             config_file.write(config.to_yaml())
     return config
 
-def send_chime_req(sleep_start_time: time, sleep_end_time: time, sound_file: str):
+def send_chime_req(sleep_start_time: time, sleep_end_time: time, sound_file: str) -> None:
     if sleep_start_time != sleep_end_time and (datetime.now().time() > sleep_start_time or datetime.now().time() < sleep_end_time):
             print('Inside sleep time, not making a sound.')
             return
     url = 'http://chime/chime'
-    requests.request("POST", url, json={'sound_file': sound_file})
+    requests.post(url, json={'sound_file': sound_file})
 
 if __name__ == '__main__':
     last_message = EncryptedMessage()
@@ -49,8 +49,8 @@ if __name__ == '__main__':
             logger.log(encrypted_message, decrypted_message, config.log_rotation_length)
         if config.user[:6] == decrypted_message.id and not decrypted_message.event.startswith('motion'):
             print('Matched user name and this is a button press!')
-            requests.get('http://watcher/ring')
             send_chime_req(config.sleep_start, config.sleep_end, config.sound_file)
+            requests.get('http://watcher/ring')
         elif config.user[:6] == decrypted_message.id:
             print('Matched user name and this is a motion event"')
-            requests.request('GET', 'http://watcher/motion')
+            requests.get('http://watcher/motion')
