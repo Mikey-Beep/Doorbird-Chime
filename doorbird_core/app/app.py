@@ -1,5 +1,5 @@
 from encrypted_message import EncryptedMessage
-from doorbird_watcher import DoorbirdWatcher
+from doorbird_listener import DoorbirdListener
 from logger import DoorbirdLogger
 from common.config.config import Config
 from pathlib import Path
@@ -20,10 +20,10 @@ def load_config(config_path: Path):
 
 def send_chime_req(sleep_start_time: time, sleep_end_time: time, sound_file: str) -> None:
     if sleep_start_time != sleep_end_time and (datetime.now().time() > sleep_start_time or datetime.now().time() < sleep_end_time):
-            print('Inside sleep time, not making a sound.')
-            return
+        print('Inside sleep time, not making a sound.')
+        return
     url = 'http://chime/chime'
-    requests.post(url, json={'sound_file': sound_file})
+    requests.post(url, json = {'sound_file': sound_file})
 
 if __name__ == '__main__':
     last_message = EncryptedMessage()
@@ -31,10 +31,10 @@ if __name__ == '__main__':
     config = load_config(config_path)
     with config_path.open('w') as config_file:
         config_file.write(config.to_yaml())
-    watcher = DoorbirdWatcher()
+    listener = DoorbirdListener()
     logger = DoorbirdLogger()
     while 1:
-        encrypted_message = watcher.watch()
+        encrypted_message = listener.listen()
         config = load_config(config_path)
         if encrypted_message == last_message and encrypted_message != EncryptedMessage(config.test_message):
             print('Received a duplicate message, skipping it.')
