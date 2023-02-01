@@ -1,5 +1,6 @@
 services:
   core:
+    image: ws11containerreg.azurecr.io/doorbird_chime-core
     build: 
       context: ./
       dockerfile: ./doorbird_core/dockerfile
@@ -12,6 +13,7 @@ services:
       - doorbird-log:/etc/core/log
     restart: always
   chime:
+    image: ws11containerreg.azurecr.io/doorbird_chime-chime
     build: 
       context: ./
       dockerfile: ./doorbird_chime/dockerfile
@@ -25,6 +27,7 @@ services:
       - '/dev/snd:/dev/snd'
     restart: always
   control-back:
+    image: ws11containerreg.azurecr.io/doorbird_chime-control-back
     build: 
       context: ./
       dockerfile: ./doorbird_control_back/dockerfile
@@ -39,6 +42,7 @@ services:
       - doorbird-images:/etc/serv/images
     restart: always
   control-front:
+    image: ws11containerreg.azurecr.io/doorbird_chime-control-front
     depends_on:
       - core
       - control-back
@@ -46,12 +50,13 @@ services:
       context: ./
       dockerfile: ./doorbird_control_front/dockerfile
     ports:
-      - '5005:80'
-      - '5006:443'
+      - '${front_http_port}:80'
+      - '${front_https_port}:443'
     networks:
       - doorbird-net
     restart: always
   watcher:
+    image: ws11containerreg.azurecr.io/doorbird_chime-watcher
     depends_on:
       - core
     build: 
