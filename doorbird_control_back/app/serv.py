@@ -4,6 +4,7 @@ from flask import Flask, request, Response, send_file
 from test_broadcast import TestBroadcaster
 from common.config.config import Config
 from sounds import SoundManager
+from requests.auth import HTTPDigestAuth
 
 app = Flask(__name__)
 config_path = Path(__file__).parent.parent / 'conf' / 'conf.yml'
@@ -103,5 +104,12 @@ def get_current_image():
     url = 'http://watcher/current_image'
     resp = requests.get(url)
     return send_file(io.BytesIO(resp.content), mimetype = 'image/jpeg')
+
+@app.route('/trigger_ir', methods = ['GET'])
+def trigger_ir():
+    url = f'http://{conf.doorbell_ip}/bha-api/light-on.cgi'
+    auth = HTTPDigestAuth(conf.user, conf.password)
+    requests.get(url, auth = auth, verify = False)
+    return Response(status = 200)
 
 app.run(host = '0.0.0.0', port = 80)
