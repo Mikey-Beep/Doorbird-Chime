@@ -85,4 +85,9 @@ def get_current_image():
     resp = requests.get(url)
     return send_file(io.BytesIO(resp.content), mimetype = 'image/jpeg')
 
+@app.route('/trigger_ir', methods = ['GET'])
+def trigger_ir():
+    requests.get('http://control-back/triger_ir')
+    return Response(status = 200)
+
 app.run(host='0.0.0.0', port = 80)
