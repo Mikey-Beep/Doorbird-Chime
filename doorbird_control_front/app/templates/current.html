@@ -11,9 +11,30 @@
         <div class="content">
             <div>
                 <div>
-                    <img id="image" src="/current_image"/>
+                    <img id="image"/>
+                </div>
+                <div>
+                    <button onclick="triggerIr()" id="triggerIr">Activate IR Light</button>
                 </div>
             </div>
         </div>
     </body>
 </html>
+
+<script>
+    async function populateImage() {
+        while(true){
+            await new Promise(r => setTimeout(r, 5000));
+            await reloadImg('/current_image');
+        }
+    }
+    async function reloadImg(url) {
+        await fetch(url, { cache: 'reload', mode: 'no-cors' });
+        document.getElementById('image').src = ''
+        document.getElementById('image').src = url
+    }
+    async function triggerIr() {
+        await fetch('/trigger_ir');
+        await reloadImg('/current_image')
+    }
+</script>
