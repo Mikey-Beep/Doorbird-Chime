@@ -67,6 +67,9 @@
                     </div>
                 </form>
             </div>
+            <div>
+                <button onclick="download()" id="exportconfig">Export Config</button>
+            </div>
         </div>
     </body>
 </html>
@@ -143,4 +146,23 @@
             populateConfig();
         });
     }
+
+    async function download() {
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(await fetch("/get_config")
+            .then(await function(response) {
+                return response.json();
+            })
+            .then(await function(jsonResponse) {
+                return JSON.stringify(jsonResponse);
+            })));
+        element.setAttribute('download', 'doorbird_config.json');
+
+        element.style.display = 'none';
+        document.body.appendChild(element);
+
+        element.click();
+
+        document.body.removeChild(element);
+        }
 </script>
