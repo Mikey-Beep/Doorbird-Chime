@@ -13,7 +13,22 @@
                 <div>
                     <img id="image" src="/current_image"/>
                 </div>
+                <div>
+                    <button onclick="triggerIr()" id="triggerIr">Activate IR Light</button>
+                </div>
             </div>
         </div>
     </body>
 </html>
+
+<script>
+    async function reloadImg(url) {
+        await fetch(url, { cache: 'reload', mode: 'no-cors' });
+        document.body.querySelectorAll(`img[src='${url}']`)
+            .forEach(img => img.src = url);
+    }
+    async function triggerIr() {
+        await fetch('/trigger_ir');
+        await reloadImg('/current_image')
+    }
+</script>
