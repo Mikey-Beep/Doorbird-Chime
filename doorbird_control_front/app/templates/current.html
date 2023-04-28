@@ -22,6 +22,12 @@
 </html>
 
 <script>
+    async function populateImage() {
+        while(true){
+            await new Promise(r => setTimeout(r, 5000));
+            await reloadImg('/current_image');
+        }
+    }
     async function reloadImg(url) {
         await fetch(url, { cache: 'reload', mode: 'no-cors' });
         document.body.querySelectorAll(`img[src='${url}']`)
