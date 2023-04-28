@@ -11,7 +11,7 @@
         <div class="content">
             <div>
                 <div>
-                    <img id="image" src="/current_image"/>
+                    <img id="image"/>
                 </div>
                 <div>
                     <button onclick="triggerIr()" id="triggerIr">Activate IR Light</button>
@@ -30,8 +30,8 @@
     }
     async function reloadImg(url) {
         await fetch(url, { cache: 'reload', mode: 'no-cors' });
-        document.body.querySelectorAll(`img[src='${url}']`)
-            .forEach(img => img.src = url);
+        document.getElementById('image').src = ''
+        document.getElementById('image').src = url
     }
     async function triggerIr() {
         await fetch('/trigger_ir');
