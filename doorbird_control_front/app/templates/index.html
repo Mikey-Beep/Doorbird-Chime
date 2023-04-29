@@ -67,6 +67,20 @@
                     </div>
                 </form>
             </div>
+            <div>
+                <button onclick="download()" id="exportconfig">Export Config</button>
+            </div>
+            <div>
+                <form action="javascript:uploadConfig()" method="post" enctype="multipart/form-data">
+                    <!--<label for="sfileupload" class="custom-file-upload">Upload Sound File</label>-->
+                    <div>
+                        <input type="file" id="cfileupload" name="cfileupload"/>
+                    </div>
+                    <div>
+                        <input type="submit" value="Upload"/>
+                    </div>
+                </form>
+            </div>
         </div>
     </body>
 </html>
@@ -112,6 +126,28 @@
             });
     }
 
+    function uploadConfig(){
+        file = document.getElementById("cfileupload").files[0]
+        if (file) {
+            var reader = new FileReader();
+            reader.readAsText(file, "UTF-8");
+            reader.onload = function (evt) {
+                fetch("/send_config", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: evt.target.result
+                }).then(function(response) {
+                    populateConfig();
+                });
+            }
+            reader.onerror = function (evt) {
+                alert("error reading file");
+            }
+        }
+    }
+
     function sendConfig(){
         var data = {};
         data.user = document.getElementById("uname").value;
@@ -143,4 +179,23 @@
             populateConfig();
         });
     }
+
+    async function download() {
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(await fetch("/get_config")
+            .then(await function(response) {
+                return response.json();
+            })
+            .then(await function(jsonResponse) {
+                return JSON.stringify(jsonResponse);
+            })));
+        element.setAttribute('download', 'doorbird_config.json');
+
+        element.style.display = 'none';
+        document.body.appendChild(element);
+
+        element.click();
+
+        document.body.removeChild(element);
+        }
 </script>
