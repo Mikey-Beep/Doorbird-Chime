@@ -49,6 +49,18 @@
                         <input type="number" id="imageretention" name="imageretention"/>
                     </div>
                     <div>
+                        <label for="pingfreq">Ping Frequency</label>
+                        <input type="number" id="pingfreq" name="pingfreq"/>
+                    </div>
+                    <div>
+                        <label for="pingvol">Ping Volume</label>
+                        <input type="number" id="pingvol" name="pingvol"/>
+                    </div>
+                    <div>
+                        <label for="pingdur">Ping Duration</label>
+                        <input type="number" id="pingdur" name="pingdur"/>
+                    </div>
+                    <div>
                         <input type="submit" value="Submit">
                     </div>
                 </form>
@@ -123,6 +135,9 @@
                 document.getElementById("logrotate").value = jsonResponse.log_rotation_length;
                 document.getElementById("doorbellip").value = jsonResponse.doorbell_ip;
                 document.getElementById("imageretention").value = jsonResponse.event_retention_count;
+                document.getElementById("pingfreq").value = jsonResponse.ping_freq;
+                document.getElementById("pingvol").value = jsonResponse.ping_vol;
+                document.getElementById("pingdur").value = jsonResponse.ping_dur;
             });
     }
 
@@ -159,6 +174,9 @@
         data.log_rotation_length = document.getElementById("logrotate").value;
         data.doorbell_ip = document.getElementById("doorbellip").value;
         data.event_retention_count = document.getElementById("imageretention").value;
+        data.ping_freq = document.getElementById("pingfreq").value;
+        data.ping_vol = document.getElementById("pingvol").value;
+        data.ping_dur = document.getElementById("pingdur").value;
         fetch("/send_config", {
             method: "POST",
             headers: {

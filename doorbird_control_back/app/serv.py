@@ -1,4 +1,4 @@
-import io, json, requests
+import io, json, requests, struct, wave, math
 from pathlib import Path
 from flask import Flask, request, Response, send_file
 from test_broadcast import TestBroadcaster
@@ -32,6 +32,7 @@ def config():
         conf.update(request.json)
         with config_path.open('w') as config_file:
             config_file.write(conf.to_yaml())
+        gen_beep_file(conf.ping_freq, conf.ping_vol, conf.ping_dur)
         return Response(status = 200)
 
 @app.route('/sound_files', methods = ['GET'])
@@ -111,5 +112,20 @@ def trigger_ir():
     auth = HTTPDigestAuth(conf.user, conf.password)
     requests.get(url, auth = auth, verify = False)
     return Response(status = 200)
+
+def gen_beep_file(freq: int, vol: int, dur: int) -> Path:
+    beep_path = Path(__file__).parent.parent / 'sounds' / 'beep.wav'
+    wave_points = generate_wave(freq, vol, dur)
+    print('Generating beep file.')
+    beep_file = wave.open(str(beep_path), 'w')
+    beep_file.setparams((1, 2, 44100, len(wave_points), 'NONE', 'notcompressed'))
+    for sample in wave_points:
+        beep_file.writeframes(struct.pack('h', int(sample * 32767)))
+    beep_file.close()
+
+def generate_wave(freq: int, vol: int, dur: int) -> list[float]:
+    print('Generating beep wave.')
+    num_samples = dur * (44100 / 1000.0)
+    return [(vol / 100) * math.sin(2 * math.pi * freq * (x / 44100)) for x in range(int(num_samples))]
 
 app.run(host = '0.0.0.0', port = 80)

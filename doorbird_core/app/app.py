@@ -25,6 +25,10 @@ def send_chime_req(sleep_start_time: time, sleep_end_time: time, sound_file: str
     url = 'http://chime/chime'
     requests.post(url, json = {'sound_file': sound_file})
 
+def send_ping_req() -> None:
+    url = 'http://chime/ping'
+    requests.post(url)
+
 if __name__ == '__main__':
     last_message = EncryptedMessage()
     config_path = Path(__file__).parent.parent / 'conf' / 'conf.yml'
@@ -49,8 +53,9 @@ if __name__ == '__main__':
             logger.log(encrypted_message, decrypted_message, config.log_rotation_length)
         if config.user[:6] == decrypted_message.id and not decrypted_message.event.startswith('motion'):
             print('Matched user name and this is a button press!')
-            send_chime_req(config.sleep_start, config.sleep_end, config.sound_file)
             requests.get('http://watcher/ring')
+            send_chime_req(config.sleep_start, config.sleep_end, config.sound_file)
         elif config.user[:6] == decrypted_message.id:
-            print('Matched user name and this is a motion event"')
+            print('Matched user name and this is a motion event.')
             requests.get('http://watcher/motion')
+            send_ping_req()

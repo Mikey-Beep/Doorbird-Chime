@@ -9,7 +9,7 @@ except:
 app = Flask(__name__)
 
 @app.route('/chime', methods = ['POST'])
-def chime():
+def chime() -> Response:
     sound_file_path = Path(__file__).parent.parent / 'sounds' / request.json['sound_file']
     #Try and play a sound using winsound, if that fails try aplay for linux.
     try:
@@ -19,5 +19,17 @@ def chime():
         print(f'Winsound failed, trying aplay.')
         os.system(f'aplay -D plughw:1,0 {sound_file_path}')
     return Response(status = 200)
+
+@app.route('/ping', methods = ['POST'])
+def ping() -> Response:
+    beep_file_path = Path(__file__).parent.parent / 'sounds' / 'beep.wav'
+    try:
+        print('Trying to beep using winsound.')
+        winsound.Play_sound(beep_file_path, winsound.SND_FILENAME)
+    except:
+        print(f'Winsound failed, trying aplay.')
+        os.system(f'aplay -D plughw:1,0 {beep_file_path}')
+    return Response(status = 200)
+
 
 app.run(host='0.0.0.0', port = 80)
