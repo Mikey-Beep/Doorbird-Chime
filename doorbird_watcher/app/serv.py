@@ -23,6 +23,6 @@ def ring():
 
 @app.route('/current_image', methods = ['GET'])
 def current():
-    return send_file(io.BytesIO(watcher.get_current_image()), mimetype = 'image/jpeg')
+    return send_file(io.BytesIO(watcher.images[-1]), mimetype = 'image/jpeg')
 
 app.run(host = '0.0.0.0', port = 80)
