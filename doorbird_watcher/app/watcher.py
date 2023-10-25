@@ -1,3 +1,4 @@
+from collections import deque
 from pathlib import Path
 from datetime import datetime
 import requests, threading, time, shutil, urllib3
@@ -12,7 +13,8 @@ class Watcher:
         self.event_retention_count = event_retention_count
         self.image_spacing = image_spacing
         self.image_dir = Path(__file__).parent.parent / 'images'
-        self.images = [self.get_current_image()]
+        self.images = deque(maxlen=5)
+        self.images.append(self.get_current_image())
         self.watcher_thread = threading.Thread(target = self.watch, name = 'Watcher')
         self.watcher_thread.start()
 
@@ -24,7 +26,6 @@ class Watcher:
         while True:
             time.sleep(self.image_spacing)
             self.images.append(self.get_current_image())
-            self.images = self.images[-3:]
     
     def drop_old_images(self, event_name: str) -> None:
         event_dir = self.image_dir / event_name
