@@ -36,7 +36,7 @@ class Watcher:
 
     def save_event_set(self, event_name: str) -> None:
         # Grab the most recent 3 images from the watcher.
-        images = self.images.copy()
+        images = deque([img for img in self.images], maxlen=5)
         print('Storing images.')
         # Grab two more images.
         time.sleep(self.image_spacing)

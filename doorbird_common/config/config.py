@@ -12,7 +12,7 @@ class Config:
         self.sleep_end = time(0, 0)
         self.test_message = b''
         self.log_rotation_length = 100
-        self.doorbell_ip = ''
+        self.doorbell_ip = '127.0.0.1'
         self.event_retention_count = 100
         self.ping_freq = 4000
         self.ping_vol = 40
