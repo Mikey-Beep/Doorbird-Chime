@@ -1,5 +1,6 @@
 from pathlib import Path
 
+
 class SoundManager:
     def __init__(self):
         self.sound_directory = Path(__file__).parent.parent / 'sounds'

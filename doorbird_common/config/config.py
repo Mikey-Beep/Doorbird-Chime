@@ -1,7 +1,9 @@
 from __future__ import annotations
-import base64, yaml
 from datetime import time
 from pathlib import Path
+import base64
+import yaml
+
 
 class Config:
     def __init__(self):
@@ -25,7 +27,7 @@ class Config:
         new_config = Config()
         new_config.update(config)
         return new_config
-    
+
     def to_yaml(self) -> str:
         return yaml.dump(self.to_dict())
 
@@ -36,7 +38,8 @@ class Config:
         output['sound_file'] = self.sound_file
         output['sleep_start'] = self.sleep_start.isoformat()
         output['sleep_end'] = self.sleep_end.isoformat()
-        output['test_packet'] = base64.b64encode(self.test_message).decode('ascii')
+        output['test_packet'] = base64.b64encode(
+            self.test_message).decode('ascii')
         output['log_rotation_length'] = self.log_rotation_length
         output['doorbell_ip'] = self.doorbell_ip
         output['event_retention_count'] = self.event_retention_count
@@ -48,37 +51,50 @@ class Config:
     def update(self, config: dict[str, any]) -> None:
         try:
             self.password = config['password']
-        except: pass
+        except KeyError:
+            pass
         try:
             self.user = config['user']
-        except: pass
+        except KeyError:
+            pass
         try:
             self.sound_file = config['sound_file']
-        except: pass
+        except KeyError:
+            pass
         try:
-            self.sleep_start =  time.fromisoformat(config['sleep_start'])
-        except: pass
+            self.sleep_start = time.fromisoformat(config['sleep_start'])
+        except (KeyError, ValueError):
+            pass
         try:
             self.sleep_end = time.fromisoformat(config['sleep_end'])
-        except: pass
+        except (KeyError, ValueError):
+            pass
         try:
-            self.test_message = base64.b64decode(config['test_packet'].encode('ascii'))
-        except: pass
+            self.test_message = base64.b64decode(
+                config['test_packet'].encode('ascii'))
+        except (KeyError, ValueError):
+            pass
         try:
             self.log_rotation_length = int(config['log_rotation_length'])
-        except: pass
+        except (KeyError, ValueError):
+            pass
         try:
             self.doorbell_ip = config['doorbell_ip']
-        except: pass
+        except KeyError:
+            pass
         try:
             self.event_retention_count = int(config['event_retention_count'])
-        except: pass
+        except (KeyError, ValueError):
+            pass
         try:
             self.ping_freq = int(config['ping_freq'])
-        except: pass
+        except (KeyError, ValueError):
+            pass
         try:
             self.ping_vol = int(config['ping_vol'])
-        except: pass
+        except (KeyError, ValueError):
+            pass
         try:
             self.ping_dur = int(config['ping_dur'])
-        except: pass
+        except (KeyError, ValueError):
+            pass
