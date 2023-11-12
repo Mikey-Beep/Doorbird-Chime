@@ -1,8 +1,12 @@
+"""This module handles the messages sent by the doorbell after they have been decrypted.
+"""
 from __future__ import annotations
 from datetime import datetime
 
 
 class DecryptedMessage:
+    """This class models the decrypted messages.
+    """
     def __init__(self, cleartext: bytes):
         self.cleartext = cleartext
         # The ID of the device sending the alert.

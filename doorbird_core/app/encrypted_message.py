@@ -1,9 +1,13 @@
+"""This module handles the encrypted messages sent by the doorbell.
+"""
 from __future__ import annotations
 from nacl import pwhash, secret, bindings
 from decrypted_message import DecryptedMessage
 
 
 class EncryptedMessage:
+    """This class models the encrypted messages and provides the ability to decrypt them.
+    """
     def __init__(self, message_bytes: bytes = b'\xde\xad\xbe\x01'):
         self.message_bytes = message_bytes
         # Check for the doorbird signature.
@@ -39,8 +43,7 @@ class EncryptedMessage:
         ])
 
     def decrypt(self, passwd: str) -> DecryptedMessage:
-        """
-        Decrypt the message using the provided password.
+        """Decrypt the message using the provided password.
         """
         # Only the last 5 characters of the password are used!?
         passwd = passwd[:5].encode('utf-8')

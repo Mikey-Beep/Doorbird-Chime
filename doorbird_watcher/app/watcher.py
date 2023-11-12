@@ -1,3 +1,5 @@
+"""This module interacts with the doorbell to retrieve images.
+"""
 from collections import deque
 from pathlib import Path
 from datetime import datetime
@@ -12,6 +14,7 @@ urllib3.disable_warnings()
 
 
 class Watcher:
+    """This Class authenticates with the doorbell and maintains a rolling 5 image history."""
     def __init__(self,
                  doorbell_ip: str,
                  user: str,
@@ -30,16 +33,22 @@ class Watcher:
         self.watcher_thread.start()
 
     def get_current_image(self) -> bytes:
+        """Get a current image from the doorbell.
+        """
         url = f'https://{self.doorbell_ip}/bha-api/image.cgi'
         response = requests.get(url, auth=self.auth, verify=False, timeout=10)
         return response.content
 
     def watch(self) -> None:
+        """Capture images for the rolling history.
+        """
         while True:
             time.sleep(self.image_spacing)
             self.images.append(self.get_current_image())
 
     def drop_old_images(self, event_name: str) -> None:
+        """Delete old saved images when new ones are captured.
+        """
         event_dir = self.image_dir / event_name
         events = sorted(list(event_dir.iterdir()), key=lambda x: x.name)
         if len(events) > self.event_retention_count:
@@ -47,6 +56,8 @@ class Watcher:
                 shutil.rmtree(events[i])
 
     def save_event_set(self, event_name: str) -> None:
+        """Save a set of images when an event is triggered.
+        """
         # Grab the most recent 3 images from the watcher.
         images = deque(list(self.images), maxlen=5)
         print('Storing images.')

@@ -1,3 +1,5 @@
+"""This module runs the backend API for the doorbell controls.
+"""
 import io
 import json
 import struct
@@ -21,6 +23,8 @@ sound_dir = Path(__file__).parent.parent / 'sounds'
 
 @app.route('/api/docs', methods=['GET'])
 def serv_api():
+    """Serves the OpenAPI definition.
+    """
     api_path: Path = Path(__file__).parent.parent / 'openapi' / 'openapi.yaml'
     with api_path.open() as api_file:
         file_content = api_file.read()
@@ -29,6 +33,8 @@ def serv_api():
 
 @app.route('/test_broadcast', methods=['GET'])
 def test_broadcast():
+    """Sends a test broadcast as if the doorbell button was pressed.
+    """
     broadcaster = TestBroadcaster()
     broadcaster.broadcast(conf.test_message)
     return Response(status=200)
@@ -36,6 +42,8 @@ def test_broadcast():
 
 @app.route('/config', methods=['GET', 'POST'])
 def config():
+    """Allows interaction with the overall configuration.
+    """
     if request.method == 'POST':
         conf.update(request.json)
         with config_path.open('w') as config_file:
@@ -47,11 +55,15 @@ def config():
 
 @app.route('/sound_files', methods=['GET'])
 def list_sound_files():
+    """Lists all known sound files.
+    """
     return Response(status=200, response=json.dumps(sound_manager.list_sounds()))
 
 
 @app.route('/sound_file', methods=['POST'])
 def sound_file():
+    """Allows new sound files to be uploaded.
+    """
     # check if the post request has the file part
     if 'file' not in request.files:
         return Response(status=400)
@@ -68,6 +80,8 @@ def sound_file():
 
 @app.route('/log', methods=['GET'])
 def get_log():
+    """Allows retrieval of the event log.
+    """
     log_path = Path(__file__).parent.parent / 'log' / 'log.txt'
     log_data = []
     with log_path.open() as log_file:
@@ -88,6 +102,8 @@ def get_log():
 
 @app.route('/events/<event_type>', methods=['GET'])
 def get_motion_events(event_type: str):
+    """Gets a list of stored motion events.
+    """
     motion_path = image_dir / event_type
     try:
         events = sorted(
@@ -99,6 +115,8 @@ def get_motion_events(event_type: str):
 
 @app.route('/events/<event_type>/<event_timestamp>', methods=['GET'])
 def get_motion_event(event_type: str, event_timestamp: str):
+    """Gets a list of images for a given motion event.
+    """
     motion_path = image_dir / event_type
     try:
         events = [item.name for item in motion_path.iterdir()]
@@ -114,12 +132,16 @@ def get_motion_event(event_type: str, event_timestamp: str):
 
 @app.route('/image/<event_type>/<event_timestamp>/<image_name>', methods=['GET'])
 def get_image(event_type: str, event_timestamp: str, image_name: str):
+    """Gets an image from a motion event.
+    """
     image_path = image_dir / event_type / event_timestamp / image_name
     return send_file(image_path, mimetype='image/jpeg')
 
 
 @app.route('/current_image', methods=['GET'])
 def get_current_image():
+    """Gets the current image from teh doorbell.
+    """
     url = 'http://watcher/current_image'
     resp = requests.get(url, timeout=10)
     return send_file(io.BytesIO(resp.content), mimetype='image/jpeg')
@@ -127,6 +149,8 @@ def get_current_image():
 
 @app.route('/trigger_ir', methods=['GET'])
 def trigger_ir():
+    """Activate the IR light on the doorbell.
+    """
     url = f'http://{conf.doorbell_ip}/bha-api/light-on.cgi'
     auth = HTTPDigestAuth(conf.user, conf.password)
     requests.get(url, auth=auth, verify=False, timeout=10)
@@ -134,6 +158,8 @@ def trigger_ir():
 
 
 def gen_beep_file(freq: int, vol: int, dur: int) -> Path:
+    """Generates a WAV file from the frequency, volume, and duration.
+    """
     beep_path = sound_dir / 'beep.wav'
     wave_points = generate_wave(freq, vol, dur)
     print('Generating beep file.')
@@ -146,9 +172,12 @@ def gen_beep_file(freq: int, vol: int, dur: int) -> Path:
 
 
 def generate_wave(freq: int, vol: int, dur: int) -> list[float]:
+    """Generates a wave from the frequency, volume, and duration."""
     print('Generating beep wave.')
     num_samples = dur * (44100 / 1000.0)
-    return [(vol / 100) * math.sin(2 * math.pi * freq * (x / 44100)) for x in range(int(num_samples))]
+    return [(vol / 100) * math.sin(2 * math.pi * freq * (x / 44100))
+            for x
+            in range(int(num_samples))]
 
 
 app.run(host='0.0.0.0', port=80)

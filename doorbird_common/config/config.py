@@ -1,3 +1,4 @@
+"""This module is responsible for handling the configuration for the doorbell."""
 from __future__ import annotations
 from datetime import time
 from pathlib import Path
@@ -6,6 +7,8 @@ import yaml
 
 
 class Config:
+    """The object holding the configuration.
+    """
     def __init__(self):
         self.password = ''
         self.user = ''
@@ -22,6 +25,8 @@ class Config:
 
     @classmethod
     def from_yaml(cls, config_path: Path) -> Config:
+        """Creates a Config from a yaml file.
+        """
         with config_path.open() as config_file:
             config = yaml.safe_load(config_file)
         new_config = Config()
@@ -29,9 +34,13 @@ class Config:
         return new_config
 
     def to_yaml(self) -> str:
+        """Writes a Config to a yaml file.
+        """
         return yaml.dump(self.to_dict())
 
     def to_dict(self) -> dict[str, any]:
+        """Converts a Config to a dictionary.
+        """
         output = {}
         output['password'] = self.password
         output['user'] = self.user
@@ -49,6 +58,8 @@ class Config:
         return output
 
     def update(self, config: dict[str, any]) -> None:
+        """Updates the current config from a dictionary.
+        """
         try:
             self.password = config['password']
         except KeyError:

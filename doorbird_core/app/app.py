@@ -1,3 +1,5 @@
+"""This module handles the monitoring of doorbell events.
+"""
 from pathlib import Path
 from datetime import datetime, time
 import requests
@@ -8,6 +10,8 @@ from common.config.config import Config
 
 
 def load_config(conf_path: Path):
+    """Load the config from the yaml file.
+    """
     try:
         conf = Config.from_yaml(conf_path)
         print('Config loaded.')
@@ -21,6 +25,8 @@ def load_config(conf_path: Path):
 
 
 def send_chime_req(sleep_start_time: time, sleep_end_time: time, sound_file: str) -> None:
+    """Trigger a chime event.
+    """
     if all((sleep_start_time != sleep_end_time,
         (sleep_start_time < datetime.now().time() < sleep_end_time))):
         print('Inside sleep time, not making a sound.')
@@ -30,6 +36,8 @@ def send_chime_req(sleep_start_time: time, sleep_end_time: time, sound_file: str
 
 
 def send_ping_req() -> None:
+    """Trigger a ping event.
+    """
     url = 'http://chime/ping'
     requests.post(url, timeout=10)
 
