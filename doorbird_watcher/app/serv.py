@@ -10,8 +10,8 @@ from watcher import Watcher
 app = Flask(__name__)
 config_path = Path(__file__).parent.parent / 'conf' / 'conf.yml'
 config = Config.from_yaml(config_path)
-watcher = Watcher(config.doorbell_ip, config.user,
-                  config.password, config.event_retention_count)
+user_credentials = (config.user, config.password)
+watcher = Watcher(config.doorbell_ip, user_credentials, config.event_retention_count)
 
 
 @app.route('/motion', methods=['GET'])

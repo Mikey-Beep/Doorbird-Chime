@@ -17,12 +17,11 @@ class Watcher:
     """This Class authenticates with the doorbell and maintains a rolling 5 image history."""
     def __init__(self,
                  doorbell_ip: str,
-                 user: str,
-                 password: str,
+                 user_credentials: tuple[str, str],
                  event_retention_count: int,
                  image_spacing: int = 5):
         self.doorbell_ip = doorbell_ip
-        self.auth = HTTPDigestAuth(user, password)
+        self.auth = HTTPDigestAuth(*user_credentials)
         self.event_retention_count = event_retention_count
         self.image_spacing = image_spacing
         self.image_dir = Path(__file__).parent.parent / 'images'

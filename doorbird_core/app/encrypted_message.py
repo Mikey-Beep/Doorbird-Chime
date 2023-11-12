@@ -14,8 +14,7 @@ class EncryptedMessage:
         if message_bytes[:4] != b'\xde\xad\xbe\x01':
             raise ValueError('Not a doorbird event.')
         # This is the doorbird signature in its individual pieces.
-        self.ident = message_bytes[:3]
-        self.version = message_bytes[3]
+        self.prefix = message_bytes[:4]
         # Allow creation of a dummy message if it lacks the remainder of the payload.
         try:
             # Try to get the decryption variables and encrypted cyphertext.
@@ -33,8 +32,7 @@ class EncryptedMessage:
 
     def __str__(self) -> str:
         return '\n'.join([
-            f'IDENT: {self.ident}',
-            f'VERSION: {self.version}',
+            f'PREFIX: {self.prefix}',
             f'OPSLIMIT: {self.opslimit}',
             f'MEMLIMIT: {self.memlimit}',
             f'SALT: {self.salt}',

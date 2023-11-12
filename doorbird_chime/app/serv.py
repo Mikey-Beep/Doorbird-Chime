@@ -1,14 +1,14 @@
 """This module is responsible for making sounds.
 """
 from pathlib import Path
-from flask import Flask, Response, request
 # If this is a windows environment then import winsound, otherwise we'll use os to run a command.
+import os
 try:
     import winsound
     SOUND_MODE = 'windows'
 except ImportError:
-    import os
     SOUND_MODE = 'linux'
+from flask import Flask, Response, request
 
 app = Flask(__name__)
 sound_dir = Path(__file__).parent.parent / 'sounds'
