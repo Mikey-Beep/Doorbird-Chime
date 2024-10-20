@@ -2,7 +2,7 @@ FROM alpine:latest
 COPY ./doorbird_core/requirements.txt requirements.txt
 RUN apk add --no-cache --virtual .pynacl_deps build-base python3-dev libffi-dev py-pip && \
     apk add --no-cache python3 && \
-    pip install -r requirements.txt && \
+    pip install -r requirements.txt --break-system-packages && \
     apk del .pynacl_deps
 COPY ./doorbird_core /etc/core
 COPY ./doorbird_common /etc/core/app/common
