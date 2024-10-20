@@ -66,8 +66,7 @@ def send_test_packet():
     """Proxies the test broadcast functionality.
     """
     url = 'http://control-back/test_broadcast'
-    requests.get(url, timeout=10)
-    return render_template('index.html')
+    return requests.get(url, timeout=10)
 
 
 @app.route('/get_config', methods=['GET'])
