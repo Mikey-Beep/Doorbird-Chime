@@ -1,7 +1,7 @@
 FROM alpine:latest
 COPY ./doorbird_control_front/requirements.txt requirements.txt
 RUN apk add --no-cache python3 py-pip && \
-    pip install -r requirements.txt
+    pip install -r requirements.txt --break-system-packages
 COPY ./doorbird_control_front /etc/serv
 WORKDIR /etc/serv
 CMD ["python3", "-u", "app/serv.py"]
