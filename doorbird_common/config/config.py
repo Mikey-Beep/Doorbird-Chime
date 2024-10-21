@@ -20,7 +20,6 @@ class Config:
         self.doorbell_ip = '127.0.0.1'
         self.event_retention_count = 100
         self.ping_freq = 4000
-        self.ping_vol = 40
         self.ping_dur = 100
 
     @classmethod
@@ -53,7 +52,6 @@ class Config:
         output['doorbell_ip'] = self.doorbell_ip
         output['event_retention_count'] = self.event_retention_count
         output['ping_freq'] = self.ping_freq
-        output['ping_vol'] = self.ping_vol
         output['ping_dur'] = self.ping_dur
         return output
 
@@ -99,10 +97,6 @@ class Config:
             pass
         try:
             self.ping_freq = int(config['ping_freq'])
-        except (KeyError, ValueError):
-            pass
-        try:
-            self.ping_vol = int(config['ping_vol'])
         except (KeyError, ValueError):
             pass
         try:

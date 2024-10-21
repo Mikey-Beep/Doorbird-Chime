@@ -2,10 +2,8 @@
 """
 import io
 import json
-import struct
-import wave
-import math
 from pathlib import Path
+from subprocess import check_output
 import requests
 from flask import Flask, request, Response, send_file
 from test_broadcast import TestBroadcaster
@@ -48,7 +46,7 @@ def config():
         conf.update(request.json)
         with config_path.open('w') as config_file:
             config_file.write(conf.to_yaml())
-        gen_beep_file(conf.ping_freq, conf.ping_vol, conf.ping_dur)
+        gen_beep_file(conf.ping_freq, conf.ping_dur)
         return Response(status=200)
     return Response(status=200, response=json.dumps(conf.to_dict()))
 
@@ -157,27 +155,18 @@ def trigger_ir():
     return Response(status=200)
 
 
-def gen_beep_file(freq: int, vol: int, dur: int) -> Path:
-    """Generates a WAV file from the frequency, volume, and duration.
+def gen_beep_file(freq: str, dur: int) -> Path:
+    """Generates a WAV file from the frequency and duration.
     """
     beep_path = sound_dir / 'beep.wav'
-    wave_points = generate_wave(freq, vol, dur)
-    print('Generating beep file.')
-    beep_file = wave.open(str(beep_path), 'w')
-    beep_file.setparams(
-        (1, 2, 44100, len(wave_points), 'NONE', 'notcompressed'))
-    for sample in wave_points:
-        beep_file.writeframes(struct.pack('h', int(sample * 32767)))
-    beep_file.close()
-
-
-def generate_wave(freq: int, vol: int, dur: int) -> list[float]:
-    """Generates a wave from the frequency, volume, and duration."""
-    print('Generating beep wave.')
-    num_samples = dur * (44100 / 1000.0)
-    return [(vol / 100) * math.sin(2 * math.pi * freq * (x / 44100))
-            for x
-            in range(int(num_samples))]
-
+    cmd = ('ffmpeg',
+           '-f',
+           'lavfi',
+           f'"sine=f={freq}"',
+           '-t',
+           f'{dur}',
+           f'{beep_path}')
+    check_output(cmd)
+    return beep_path
 
 app.run(host='0.0.0.0', port=80)
