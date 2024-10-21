@@ -65,6 +65,9 @@
                 <button onclick="sendTest()" id="sendtest">Send Test Packet</button>
             </div>
             <div>
+                <button onclick="testPing()" id="testPing">Test Ping</button>
+            </div>
+            <div>
                 <form action="javascript:sendSound()" method="post" enctype="multipart/form-data">
                     <!--<label for="sfileupload" class="custom-file-upload">Upload Sound File</label>-->
                     <div>
@@ -96,6 +99,10 @@
 <script>
     function sendTest(){
         fetch("/send_test");
+    }
+
+    function testPing(){
+        fetch("/test_ping", {method: "POST"})
     }
 
     async function populateConfig(){

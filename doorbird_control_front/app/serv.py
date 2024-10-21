@@ -66,7 +66,17 @@ def send_test_packet():
     """Proxies the test broadcast functionality.
     """
     url = 'http://control-back/test_broadcast'
-    return requests.get(url, timeout=10)
+    resp = requests.get(url, timeout=10)
+    return Response(status=resp.status_code)
+
+
+@app.route('/test_ping', methods=['POST'])
+def test_ping():
+    """Proxies the tet ping functionality.
+    """
+    url = 'http://control-back/test_ping'
+    resp = requests.get(url, timeout=10)
+    return Response(status=resp.status_code)
 
 
 @app.route('/get_config', methods=['GET'])

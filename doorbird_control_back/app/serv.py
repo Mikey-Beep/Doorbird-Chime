@@ -38,6 +38,15 @@ def test_broadcast():
     return Response(status=200)
 
 
+@app.route('/test_ping', methods=['POST'])
+def test_ping():
+    """Triggers the ping method directly.
+    """
+    url = 'http://chime/ping'
+    requests.post(url, timeout=10)
+    return Response(status=200)
+
+
 @app.route('/config', methods=['GET', 'POST'])
 def config():
     """Allows interaction with the overall configuration.
