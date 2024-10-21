@@ -75,7 +75,7 @@ def test_ping():
     """Proxies the tet ping functionality.
     """
     url = 'http://control-back/test_ping'
-    resp = requests.get(url, timeout=10)
+    resp = requests.post(url, timeout=10)
     return Response(status=resp.status_code)
 
 
