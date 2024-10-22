@@ -183,6 +183,7 @@ def gen_beep_file(freq: str, dur: int, name: str) -> Path:
            f'sine=f={freq}',
            '-t',
            f'{dur}',
+           '-y',
            f'{beep_path}')
     check_output(cmd)
     return beep_path
