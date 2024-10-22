@@ -72,9 +72,18 @@ def send_test_packet():
 
 @app.route('/test_ping', methods=['POST'])
 def test_ping():
-    """Proxies the tet ping functionality.
+    """Proxies the test ping functionality.
     """
     url = 'http://control-back/test_ping'
+    resp = requests.post(url, timeout=10)
+    return Response(status=resp.status_code)
+
+
+@app.route('/plex_ping', methods=['POST'])
+def plex_ping():
+    """Proxies the plex ping functionality.
+    """
+    url = 'http://control-back/plex_ping'
     resp = requests.post(url, timeout=10)
     return Response(status=resp.status_code)
 

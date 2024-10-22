@@ -19,8 +19,10 @@ class Config:
         self.log_rotation_length = 100
         self.doorbell_ip = '127.0.0.1'
         self.event_retention_count = 100
-        self.ping_freq = 4000
-        self.ping_dur = 100
+        self.ping_freq = '45:10'
+        self.ping_dur = 2
+        self.plex_ping_freq = '45::10'
+        self.plex_ping_dur = 3
 
     @classmethod
     def from_yaml(cls, config_path: Path) -> Config:
@@ -53,6 +55,8 @@ class Config:
         output['event_retention_count'] = self.event_retention_count
         output['ping_freq'] = self.ping_freq
         output['ping_dur'] = self.ping_dur
+        output['plex_ping_freq'] = self.plex_ping_freq
+        output['plex_ping_dur'] = self.plex_ping_dur
         return output
 
     def update(self, config: dict[str, any]) -> None:
@@ -96,10 +100,18 @@ class Config:
         except (KeyError, ValueError):
             pass
         try:
-            self.ping_freq = int(config['ping_freq'])
-        except (KeyError, ValueError):
+            self.ping_freq = config['ping_freq']
+        except KeyError:
             pass
         try:
             self.ping_dur = int(config['ping_dur'])
+        except (KeyError, ValueError):
+            pass
+        try:
+            self.plex_ping_freq = config['plex_ping_freq']
+        except KeyError:
+            pass
+        try:
+            self.plex_ping_dur = int(config['plex_ping_dur'])
         except (KeyError, ValueError):
             pass

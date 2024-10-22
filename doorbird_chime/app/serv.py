@@ -30,7 +30,19 @@ def chime() -> Response:
 def ping() -> Response:
     """This function handles playing a sound when motion is detected.
     """
-    beep_file_path =  sound_dir / 'beep.wav'
+    beep_file_path =  sound_dir / 'ping.wav'
+    if SOUND_MODE == 'windows':
+        winsound.Play_sound(beep_file_path, winsound.SND_FILENAME)
+    else:
+        os.system(f'aplay -D plughw:1,0 {beep_file_path}')
+    return Response(status=200)
+
+
+@app.route('/plex', methods=['POST'])
+def plex_ping() -> Response:
+    """This function handles playing a sound when plex has started.
+    """
+    beep_file_path =  sound_dir / 'plex.wav'
     if SOUND_MODE == 'windows':
         winsound.Play_sound(beep_file_path, winsound.SND_FILENAME)
     else:

@@ -43,8 +43,17 @@ def test_ping():
     """Triggers the ping method directly.
     """
     url = 'http://chime/ping'
-    requests.post(url, timeout=10)
-    return Response(status=200)
+    resp = requests.post(url, timeout=10)
+    return Response(status=resp.status_code)
+
+
+@app.route('/plex_ping', methods=['POST'])
+def plex_ping():
+    """Triggers the plex ping directly
+    """
+    url = 'http://chime/plex'
+    resp = requests.post(url, timeout=10)
+    return Response(status=resp.status_code)
 
 
 @app.route('/config', methods=['GET', 'POST'])
@@ -55,7 +64,8 @@ def config():
         conf.update(request.json)
         with config_path.open('w') as config_file:
             config_file.write(conf.to_yaml())
-        gen_beep_file(conf.ping_freq, conf.ping_dur)
+        gen_beep_file(conf.ping_freq, conf.ping_dur, 'ping')
+        gen_beep_file(conf.plex_ping_freq, conf.plex_ping_dur, 'plex')
         return Response(status=200)
     return Response(status=200, response=json.dumps(conf.to_dict()))
 
@@ -164,10 +174,10 @@ def trigger_ir():
     return Response(status=200)
 
 
-def gen_beep_file(freq: str, dur: int) -> Path:
+def gen_beep_file(freq: str, dur: int, name: str) -> Path:
     """Generates a WAV file from the frequency and duration.
     """
-    beep_path = sound_dir / 'beep.wav'
+    beep_path = sound_dir / f'{name}.wav'
     cmd = ('ffmpeg',
            '-f',
            'lavfi',
