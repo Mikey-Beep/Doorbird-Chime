@@ -57,6 +57,14 @@
                         <input type="number" id="pingdur" name="pingdur"/>
                     </div>
                     <div>
+                        <label for="plexpingfreq">Plex Ping Frequency</label>
+                        <input type="text" id="plexpingfreq" name="plexpingfreq"/>
+                    </div>
+                    <div>
+                        <label for="plexpingdur">Plex Ping Duration</label>
+                        <input type="number" id="plexpingdur" name="plexpingdur"/>
+                    </div>
+                    <div>
                         <input type="submit" value="Submit">
                     </div>
                 </form>
@@ -66,6 +74,9 @@
             </div>
             <div>
                 <button onclick="testPing()" id="testPing">Test Ping</button>
+            </div>
+            <div>
+                <button onclick="testPlexPing()" id="testPlexPing">Test Plex Ping</button>
             </div>
             <div>
                 <form action="javascript:sendSound()" method="post" enctype="multipart/form-data">
@@ -105,6 +116,10 @@
         fetch("/test_ping", {method: "POST"})
     }
 
+    function testPlexPing(){
+        fetch("/plex_ping", {method: "POST"})
+    }
+
     async function populateConfig(){
         await fetch("/get_sounds")
             .then(function(response) {
@@ -140,6 +155,8 @@
                 document.getElementById("imageretention").value = jsonResponse.event_retention_count;
                 document.getElementById("pingfreq").value = jsonResponse.ping_freq;
                 document.getElementById("pingdur").value = jsonResponse.ping_dur;
+                document.getElementById("plexpingfreq").value = jsonResponse.plex_ping_freq;
+                document.getElementById("plexpingdur").value = jsonResponse.plex_ping_dur;
             });
     }
 
@@ -178,6 +195,8 @@
         data.event_retention_count = document.getElementById("imageretention").value;
         data.ping_freq = document.getElementById("pingfreq").value;
         data.ping_dur = document.getElementById("pingdur").value;
+        data.plex_ping_freq = document.getElementById("plexpingfreq").value;
+        data.plex_ping_dur = document.getElementById("plexpingdur").value;
         fetch("/send_config", {
             method: "POST",
             headers: {
