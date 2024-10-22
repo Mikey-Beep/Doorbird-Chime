@@ -179,9 +179,8 @@ def gen_beep_file(freq: str, dur: int, name: str) -> Path:
     """
     beep_path = sound_dir / f'{name}.wav'
     cmd = ('ffmpeg',
-           '-f',
-           'lavfi',
-           f'"sine=f={freq}"',
+           '-lavfi',
+           f'sine=f={freq}',
            '-t',
            f'{dur}',
            f'{beep_path}')
